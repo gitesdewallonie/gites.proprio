@@ -24,7 +24,10 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        # -*- Extra requirements: -*-
+        'five.grok',
+        'gites.core',
+        'gites.db',
+        'gites.skin',
     ],
     entry_points="""
     # -*- Entry points: -*-
