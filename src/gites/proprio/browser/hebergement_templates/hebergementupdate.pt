@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="arsia">
+
+<body>
+    
+<div metal:fill-slot="main">
+     
+    <h1>:: Modification des données de l'hébergement ::</h1>
+    <div tal:define="result view/addHebergementMaj;
+                     status result/status">
+
+        <div tal:condition="python: status==1">
+            Vos données sont correctement enregistrées.
+            <br /> 
+            Elles vont être vérifiées et validées par notre équipe.
+            <br />
+            Merci.
+        </div>
+
+        <div tal:condition="python: status==-1">
+            Un problème est survenu lors de la mise à jour de vos données.
+            Un mail a été envoyé à l'équipe des Gîtes de Wallonie.
+        </div>    
+    </div>
+</div>
+</body>
+</html>

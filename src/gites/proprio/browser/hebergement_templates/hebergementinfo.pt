@@ -1,0 +1,1031 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<head>
+    <tal:comment replace="nothing">
+            Please note that this template will most likely be renamed to news_listing
+            in the future, so if you reference this template or its macros from
+            another template, make sure to change it when you upgrade.
+    </tal:comment>
+</head>
+<body>
+<div metal:fill-slot="main"
+     tal:define="hebPk request/hebPk;
+                 hebergements python:view.getHebergementByHebPk(hebPk);
+                 tableHote python:view.getTableHote();
+                 typeTables python:view.getTypeTableHoteByHebPk(hebPk);">
+    <div tal:repeat="heb hebergements">
+
+       <h1>Modification des informations de votre hébergement <span tal:content="heb/heb_nom" /></h1>
+       <p>
+       Ce formulaire vous permet de modifier les informations de votre hébergement.
+       </p>
+       <p>
+       Certaines de ces données ne peuvent pas être modifiées via ce formulaire
+       et nécessitent une intervention de la part des Gîtes de Wallonie.
+       </p>
+       <p>
+       Si vous souhaitez obtenir des informations complémentaires ou si vous
+       éprouvez des difficultés à compléter ce formulaire, merci de prendre
+       contact avec nos bureaux au 081 311 800.
+       </p>
+       <p>
+       Dès que vous aurez enregistré ce formulaire, celui-ci sera transmis
+       aux Gîtes de Wallonie qui vérifieront et valideront vos données.
+       Dès que celles-ci seront validées, elles apparaitront sur le site.
+       </p>
+
+       <form action="maj-hebergement-insertion"
+             method="post">
+           <!---[DEBUT INFORMATION GENERALE]--->
+           <input type="hidden"
+                  name="heb_maj_pk"
+                  value=""
+                  tal:attributes="value heb/heb_pk" />
+
+           <table class="maj-info">
+              <tr>
+                 <td align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                       INFORMATION GENERALE
+                    </span>
+                 </td>
+                 <td align="right" bgcolor="#ff862b">
+                    Ref :: <b tal:content="heb/heb_pk" />
+                </td>
+              </tr>
+              <tr>
+                  <td class="maj-etiquette">Type</td>
+                  <td>
+                     <span tal:content="heb/type/type_heb_nom" 
+                           class="maj-donnee" /> :: 
+                     <span tal:content="heb/type/type_heb_pk" 
+                           class="maj-donnee" />
+                  </td>
+               </tr>
+               <tr bgcolor="#FDFFE0">
+                  <td class="maj-etiquette">Nom de l'hébergement</td>
+                  <td>
+                     <input type="text"
+                            name="heb_maj_nom"
+                            size="50"
+                            value=""
+                            tal:attributes="value heb/heb_nom" />
+                  </td>
+                </tr>
+                <tr>
+                   <td class="maj-etiquette">Adresse</td>
+                   <td>
+                      <input type="text"
+                             name="heb_maj_adresse"
+                             value=""
+                             size="50"
+                             tal:attributes="value heb/heb_adresse" />
+                   </td>
+                 </tr>
+               <tr bgcolor="#FDFFE0">
+                  <td class="maj-etiquette">Code postal</td>
+                  <td class="maj-donnee">
+                     <span tal:content="heb/commune/com_cp" />
+                     (<span tal:content="heb/commune/com_nom" />)
+                  </td>
+               </tr>
+              <tr>
+                 <td class="maj-etiquette">Localité</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_localite"
+                           size="50"
+                           value=""
+                           tal:attributes="value heb/heb_localite" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0"
+                  tal:condition="python: heb.type.type_heb_pk in (5,6,9)">
+                 <td valign="center" class="maj-etiquette">Type de table d'hôte</td>
+                 <td>
+                     <div>
+                         <tal:boucle tal:repeat="table tableHote">
+                             <input type="checkbox"
+                                               name="hebhot_tabhot_fk"
+                                               checked=""
+                                               value=""
+                                               tal:attributes="checked python:table.tabho_pk in typeTables
+                                                               and table.tabho_pk in typeTables
+                                                               or None;
+                                                               value python:table.tabho_pk" />
+                                        <span tal:condition="python: table.tabho_pk in typeTables">
+                                                <img src=""
+                                                     alt=""
+                                                     title="Assiette gourmande"
+                                                     width="47"
+                                                     height="36"
+                                                     tal:attributes="src string:assiette_${repeat/table/number}.png;
+                                                                     alt string:assiette_${repeat/table/number}.png;
+                                                                     title table/tabho_type_fr" />
+                                                <br />
+                                                <span tal:content="table/tabho_type_fr"
+                                                      class="grasnoir" />
+                                                <br /><br />
+                                            </span>
+                                            <span tal:condition="python: table.tabho_pk not in typeTables">
+                                                <img src=""
+                                                     alt=""
+                                                     title="Assiette gourmande"
+                                                     width="47"
+                                                     height="36"
+                                                     tal:attributes="src string:assiette_${repeat/table/number}_off.png;
+                                                                     alt string:assiette_${repeat/table/number}.png;
+                                                                     title table/tabho_type_fr" />
+                                                <br />
+                                                <span tal:content="table/tabho_type_fr" />
+                                                <br /><br />
+                                        </span>
+                        </tal:boucle>
+                    </div>
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Nombre d'épis</td>
+                 <td>
+                    <div tal:define="nbrEpis heb/epis">
+                        <span tal:repeat="epis nbrEpis">
+                            <span tal:content="epis/heb_nombre_epis" 
+                                  class="maj-donnee" />
+                        </span>
+                    </div>
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Activités</td>
+                 <td valign="middle">
+                    <input type="checkbox"
+                           name="heb_maj_tenis"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_tenis=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_tennis.png"
+                         alt="a_tennis.png"
+                         title="Tennis"
+                         width="28"
+                         height="28" />
+                    <input type="text"
+                           name="heb_maj_tenis_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_tenis_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Tennis
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_nautisme"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_nautisme=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_voile.png"
+                         alt="a_voile.png"
+                         title="Activités nautiques"
+                         width="28"
+                         height="28" />
+                    <input type="text"
+                           name="heb_maj_nautisme_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_nautisme_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Activiés nautiques
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_sky"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_sky=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_sky.png"
+                         alt="a_sky.png"
+                         title="Ski"
+                         width="28"
+                         height="28" />
+                    <input type="text"
+                           name="heb_maj_sky_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_sky_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Ski
+                    <br/>
+                    <input type="checkbox"
+                           name="heb_maj_rando"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_rando=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_rando.png">
+                    <input type="text"
+                           name="heb_maj_rando_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_rando_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Randonnée
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_piscine"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_piscine=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_piscine.png">
+                    <input type="text"
+                           name="heb_maj_piscine_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_piscine_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Piscine
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_peche"
+                           checked="oui"
+                           value=""
+                           tal:attributes="checked python:heb.heb_peche=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_peche.png">
+                    <input type="text"
+                           name="heb_maj_peche_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_peche_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Pêche
+                    <br/>
+                    <input type="checkbox"
+                           name="heb_maj_equitation"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_equitation=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_cheval.png">
+                    <input type="text"
+                           name="heb_maj_equitation_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_equitation_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Equitation
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_velo"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_velo=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_velo.png">
+                    <input type="text"
+                           name="heb_maj_velo_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_velo_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Vélo
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_vtt"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_vtt=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_vtt.png">
+                    <input type="text"
+                           name="heb_maj_vtt_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_vtt_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    VTT
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_ravel"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_ravel=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="a_ravel.png">
+                    <input type="text"
+                           name="heb_maj_ravel_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_ravel_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Ravel
+                    <br/>
+                    </td>
+                    </tr>
+                    <tr>
+                       <td class="maj-etiquette">Informations</td>
+                       <td>
+                    <input type="checkbox"
+                           name="heb_maj_commerce"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_commerce=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="i_commerce.png" title="COMMERCE" />
+                    <input type="text"
+                           name="heb_maj_commerce_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_commerce_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Commerce
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_restaurant"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_restaurant=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="i_restaurant.png" title="RESTAURANT" />
+                    <input type="text"
+                           name="heb_maj_restaurant_distance"
+                           size="3"
+                           value=""
+                           tal:attributes="value heb/heb_restaurant_distance" />Km
+                    &nbsp;&nbsp;&nbsp;
+                    Restaurant
+                    <br />
+                    <input type="checkbox"
+                           name="heb_maj_gare"
+                           checked=""
+                           value="oui"
+                           tal:attributes="checked python:heb.heb_gare=='oui'
+                                           and 'CHECKED'or None;" />
+                    <img src="i_gare.png" title="GARE" />
+                    <input type="text"
+                           name="heb_maj_gare_distance"
+                            size="3"
+                           value=""
+                           tal:attributes="value heb/heb_gare_distance">Km
+                    &nbsp;&nbsp;&nbsp;
+                    Gare
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Animaux</td>
+                 <td>
+                     <input type="checkbox"
+                            name="heb_maj_animal"
+                            checked=""
+                            value="oui"
+                            tal:attributes="checked python:heb.heb_animal=='oui'
+                                            and 'CHECKED' or '';" />
+                    <img src="c_chien.png">
+                    &nbsp;&nbsp;&nbsp;
+                    </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Fumeur</td>
+                 <td>
+                     <input type="checkbox"
+                            name="heb_maj_fumeur"
+                            checked=""
+                            value="oui"
+                            tal:attributes="checked python:heb.heb_fumeur=='oui'
+                                            and 'CHECKED' or '';" />
+                       <img src="c_fumeur.png">
+                       &nbsp;&nbsp;&nbsp;
+                    </td>
+              </tr>
+           </table>
+           <!---[FIN INFORMATION GENERALE]--->
+
+
+           <!---[DEBUT TARIFICATION CHAMBRE]--->
+           <table class="maj-info"
+                  tal:condition="python: heb.type.type_heb_pk in (5,6,9)">
+              <tr>
+                 <td colspan="4" align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    TARIFICATION DES CHAMBRES
+                    </span>
+                 </td>
+              </tr>
+              <tr>
+                 <td>&nbsp;</td>
+                 <td align="center"><b>1 pers</b></td>
+                 <td align="center"><b>2 pers</b></td>
+                 <td align="center"><b>3 pers</b></td>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Chambre avec petit déjeuner</td>
+                 <td align="center">
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_avec_dej_1p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_avec_dej_1p" />
+                 </td>
+                 <td align="center">
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_avec_dej_2p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_avec_dej_2p" />
+                 </td>
+                 <td align="center">
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_avec_dej_3p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_avec_dej_3p" />
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Déduction si pas petit déjeuner <b>(-)</b></td>
+                 <td align="center">
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_sans_dej_1p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_sans_dej_1p" />
+                 </td>
+                 <td align="center">
+                    <!-- 
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_sans_dej_2p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_sans_dej_2p" />
+                    -->
+                 </td>
+                 <td align="center">
+                    <!--
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_sans_dej_3p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_sans_dej_3p" />
+                    -->
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Si table d'hôte, prix</td>
+                 <td align="center">
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_table_hote_1p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_table_hote_1p" />
+                 </td>
+                 <td align="center">
+                    <!--
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_table_hote_2p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_table_hote_2p" />
+                    -->
+                 </td>
+                 <td align="center">
+                    <!--
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_table_hote_3p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_table_hote_3p" />
+                     -->
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Autre</td>
+                 <td align="center">
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_autre_1p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_autre_1p" />
+                 </td>
+                 <td align="center">
+                    <!--
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_autre_2p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_autre_2p" />
+                     -->
+                 </td>
+                 <td align="center">
+                    <!--
+                    <input type="text"
+                           name="heb_maj_tarif_chmbr_autre_3p"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_chmbr_autre_3p" />
+                    -->
+                 </td>
+              </tr>
+           </table>
+           <!---[FIN TARIFICATION CHAMBRE]--->
+
+
+           <!---[DEBUT TARIFICATION GITES]--->
+           <table class="maj-info"
+                  tal:condition="python: heb.type.type_heb_pk not in (5,6,9)">
+              <!--input type="hidden"
+                     name="heb_maj_charge_fk"
+                     value=""
+                     tal:attributes="value heb/heb_charge_fk"-->
+              <tr>
+                 <td colspan="2" align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    TARIFICATION DES GITES
+                    </span>
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Tarif week-end basse saison</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_we_bs"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_we_bs" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Tarif week-end moyenne saison</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_we_ms"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_we_ms" />
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Tarif week-end haute saison</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_we_hs"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_we_hs" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Tarif semaine basse saison</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_sem_bs"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_sem_bs" />
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Tarif semaine moyenne saison</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_sem_ms"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_sem_ms" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Tarif semaine haute saison</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_sem_hs"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_sem_hs" />
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Tarif week-end fête 3 nuits</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_we_3n"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_we_3n" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Tarif week-end fête 4 nuits</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_we_4n"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_we_4n" />
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Tarif Semaine fin d'année</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_semaine_fin_annee"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_semaine_fin_annee" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Tarif garantie</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_tarif_garantie"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_tarif_garantie" />
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Tarif charge</td>
+                 <td>
+                    <div tal:define="charges python:view.getAllCharge()">
+                        <span tal:repeat="charge charges">
+                            <input type="radio"
+                                   name="heb_maj_charge_fk"
+                                   checked=""
+                                   value=""
+                                   tal:attributes="value charge/cha_pk;
+                                                   checked python:charge.cha_pk==heb.heb_charge_fk
+                                                   and charge.cha_pk==heb.heb_charge_fk or None" />
+                            <span tal:content="charge/cha_type_fr" /><br />
+                        </span>
+                    </div>
+                    <br/>
+                    Si charge forfaitaire, encodez le montant ci-dessous:<br/>
+                    <input type="text"
+                           name="heb_maj_forfait_montant"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_forfait_montant" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Tarif divers</td>
+                 <td>
+                    <!--input type="text" name="fheb_tarif_divers" value="<dtml-var heb_tarif_divers"-->
+                    <textarea name="heb_maj_tarif_divers"
+                              value=""
+                              tal:attributes="value heb/heb_tarif_divers"
+                              cols="30"
+                              rows="5"
+                              tal:content="heb/heb_tarif_divers"></textarea>
+                 </td>
+              </tr>
+
+           </table>
+           <!---[FIN TARIFICATION GITES]--->
+
+           <!---[DEBUT TAXE SEJOUR]--->
+           <table class="maj-info">
+              <tr>
+                 <td colspan="2" align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    TAXE DE SEJOUR
+                    </span>
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Taxe de Séjour</td>
+                 <td>
+                    <!--
+                    <select name="heb_maj_taxe_sejour">
+                       <option value="non">...</option>
+                           <dtml-if "heb_taxe_sejour=='oui'">
+                           <option value="oui" selected> Oui</option>
+                           <option value="non"> Non</option>
+                           <dtml-else>
+                               <option value="oui"> Oui</option>
+                           <option value="non" selected> Non</option>
+                           </dtml-if>
+                    </select>
+                    -->
+                    <select name="heb_maj_taxe_sejour">
+                        <option value="oui"
+                                selected=""
+                                tal:attributes="selected python:heb.heb_taxe_sejour == 'oui' or None">
+                                Oui
+                        </option>
+                        <option value="non"
+                                selected=""
+                                tal:attributes="selected python:heb.heb_taxe_sejour == 'non' or None">
+                                Non
+                        </option>
+                    </select>
+                    <span tal:content="heb/heb_taxe_sejour" />
+                 </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Montant de la taxe</td>
+                 <td>
+                    <input type="text"
+                           name="heb_maj_taxe_montant"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_taxe_montant" />
+                 </td>
+              </tr>
+           </table>
+           <!---[FIN TAXE SEJOUR]--->
+
+           <!---[DEBUT POINTS FORTS HEB]--->
+           <table class="maj-info">
+              <tr>
+                 <td align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    POINT FORT DE L' HEBERGEMENT
+                    </span>
+                 </td>
+              </tr>
+              <tr>
+                 <td colspan="2">
+                    <textarea name="heb_maj_pointfort_fr"
+                              cols="50"
+                              rows="9"
+                              tal:content="heb/heb_pointfort_fr"></textarea>
+                 </td>
+              </tr>
+           </table>
+           <!---[FIN POINTS FORTS HEB]--->
+
+           <!---[DEBUT DESCRIPTION HEB]--->
+           <table class="maj-info">
+              <tr>
+                 <td align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    DESCRIPTION HEBERGEMENT
+                    </span>
+                 </td>
+              </tr>
+              <tr>
+                 <td>
+                    <textarea name="heb_maj_descriptif_fr"
+                              cols="50"
+                              rows="9"
+                              tal:content="heb/heb_descriptif_fr"></textarea>
+                 </td>
+              </tr>
+           </table>
+           <!---[FIN DESCRIPTION HEB]--->
+
+           <!---[DEBUT DISTRIBUTION HEB]--->
+           <table class="maj-info">
+              <tr>
+                 <td align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    DISTRIBUTION HEBERGEMENT
+                    </span>
+
+                 </td>
+              </tr>
+              <tr>
+                 <td>
+                    <textarea name="heb_maj_distribution_fr"
+                              cols="50"
+                              rows="9"
+                              tal:content="heb/heb_distribution_fr"></textarea>
+                 </td>
+              </tr>
+           </table>
+           <!---[FIN DISTRIBUTION HEB]--->
+
+           <!---[DEBUT TYPE LIT HEB]--->
+           <table class="maj-info">
+              <tr>
+                 <td colspan="2" align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    LITERIE
+                    </span>
+
+                 </td>
+              </tr>
+              <tr>
+                 <td class="maj-etiquette">Lit d'une personne</td>
+                 <td>
+                     <input type="text"
+                            name="heb_maj_lit_1p"
+                            size="10"
+                            value=""
+                            tal:attributes="value heb/heb_lit_1p" />
+                </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                <td class="maj-etiquette">Lit de 2 personnes</td>
+                <td>
+                     <input type="text"
+                            name="heb_maj_lit_2p"
+                            size="10"
+                            value=""
+                            tal:attributes="value heb/heb_lit_2p" />
+                </td>
+              </tr>
+              <tr>
+                <td class="maj-etiquette">Lit superposé</td>
+                <td>
+                    <input type="text"
+                           name="heb_maj_lit_sup"
+                           size="10"
+                           value=""
+                           tal:attributes="value heb/heb_lit_sup" />
+                </td>
+              </tr>
+              <tr bgcolor="#FDFFE0" bgcolor="#FDFFE0">
+                 <td class="maj-etiquette">Lit pour enfant</td>
+                 <td><input type="text"
+                            name="heb_maj_lit_enf"
+                            size="10"
+                            value=""
+                            tal:attributes="value heb/heb_lit_enf" /></td>
+              </tr>
+           </table>
+           <!---[FIN TYPE LIT HEB]--->
+
+           <!---[DEBUT CONFORT HEB]--->
+           <table class="maj-info">
+              <tr>
+                 <td colspan="2" align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">
+                    CONFORT DE L'HEBERGEMENT
+                    </span>
+
+                 </td>
+              </tr>
+              <tr>
+                 <td>
+                     <input type="checkbox"
+                              name="heb_maj_confort_tv"
+                              checked=""
+                              value="oui"
+                              tal:attributes="checked python:heb.heb_confort_tv=='oui'
+                                              and
+                                              heb.heb_confort_tv=='oui'
+                                              or None" />
+                     <img src="c_tv.png" />
+                     &nbsp;&nbsp;&nbsp;&nbsp;
+                     TV - VIDEO
+                </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                 <td>
+                     <input type="checkbox"
+                              name="heb_maj_confort_feu_ouvert"
+                              checked=""
+                              value="oui"
+                              tal:attributes="checked python:heb.heb_confort_feu_ouvert=='oui'
+                                              and
+                                              heb.heb_confort_feu_ouvert=='oui'
+                                              or None" />
+                     <img src="c_feu_ouvert.png" />
+                     &nbsp;&nbsp;&nbsp;&nbsp;
+                     Feu ouvert
+                </td>
+              </tr>
+              <tr>
+                 <td>
+                     <input type="checkbox"
+                              name="heb_maj_confort_lave_vaiselle"
+                              checked=""
+                              value="oui"
+                              tal:attributes="checked python:heb.heb_confort_lave_vaiselle=='oui' 
+                                              and
+                                              heb.heb_confort_lave_vaiselle=='oui'
+                                              or None" />
+                     <img src="c_lave_vaisselle.png" />
+                     &nbsp;&nbsp;&nbsp;&nbsp;Lave-vaisselle
+                </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                <td>
+                    <input type="checkbox"
+                             name="heb_maj_confort_micro_onde"
+                             checked=""
+                             value="oui"
+                             tal:attributes="checked python:heb.heb_confort_micro_onde=='oui'
+                                             and
+                                             heb.heb_confort_micro_onde=='oui'
+                                             or None" />
+                     <img src="c_micro_onde.png" />
+                     &nbsp;&nbsp;&nbsp;&nbsp;Micro-onde
+                </td>
+              </tr>
+              <tr>
+                 <td>
+                     <input type="checkbox"
+                              name="heb_maj_confort_lave_linge"
+                              checked=""
+                              value="oui"
+                              tal:attributes="checked python:heb.heb_confort_lave_linge=='oui'
+                                              and
+                                              heb.heb_confort_lave_linge=='oui'
+                                              or None" />
+                     <img src="c_lave_linge.png" />
+                     &nbsp;&nbsp;&nbsp;&nbsp;Lave-linge
+                </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                <td>
+                     <input type="checkbox"
+                                 name="heb_maj_confort_seche_linge"
+                                 checked=""
+                                 value="oui"
+                                 tal:attributes="checked python:heb.heb_confort_seche_linge=='oui'
+                                                 and
+                                                 heb.heb_confort_seche_linge=='oui'
+                                                 or None" />
+                    <img src="c_seche_linge.png" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;Sèche-linge
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <input type="checkbox"
+                             name="heb_maj_confort_congelateur"
+                             checked=""
+                             value="oui"
+                             tal:attributes="checked python:heb.heb_confort_congelateur=='oui'
+                                             and
+                                             heb.heb_confort_congelateur=='oui'
+                                             or None" />
+                    <img src="c_congelateur.png" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;Congélateur
+                </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                <td>
+                    <input type="checkbox"
+                             name="heb_maj_confort_internet"
+                             checked=""
+                             value="oui"
+                             tal:attributes="checked python:heb.heb_confort_internet=='oui'
+                                             and
+                                             heb.heb_confort_internet=='oui'
+                                             or None" />
+                     <img src="c_internet.png" />
+                     &nbsp;&nbsp;&nbsp;&nbsp;Accès Internet
+                </td>
+             </tr>
+          </table>
+          <!---[FIN CONFORT HEB]--->
+
+          <!---[DEBUT CGT]--->
+          <table class="maj-info">
+             <tr>
+                <td colspan="2" align="left" bgcolor="#FF862B">
+                    <span class="titre_encodage">CGT</span>
+                </td>
+             </tr>
+             <tr>
+                <td class="maj-etiquette">Code CGT</td>
+                <td>
+                    <span tal:content="heb/heb_code_cgt" />
+                </td>
+              </tr>
+              <tr bgcolor="#FDFFE0">
+                <td rowspan="3" class="maj-etiquette">Capacité</td>
+                <td>
+                    <span class="maj-etiquette">min :</span> <span tal:content="heb/heb_cgt_cap_min" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="maj-etiquette">max :</span> <span tal:content="heb/heb_cgt_cap_max" />
+                </td>
+              </tr>
+              <tr>
+                <td bgcolor="#FDFFE0">
+                    <span class="maj-etiquette">nombre de chambre :</span> <span tal:content="heb/heb_cgt_nbre_chmbre" />
+                </td>
+              </tr>
+          </table>
+          <!---[FIN CGT]--->
+          <hr />
+          <table align="center">
+            <tr>
+              <td colspan="2" align="center">
+                <input type="hidden"
+                       name="heb_maj_hebpk"
+                       value=""
+                       tal:attributes="value heb/heb_pk" />
+                <input type="hidden"
+                       name="heb_maj_info_etat"
+                       value="En attente confirmation" />
+                <input type="submit"
+                       value="Modifier mes données" />
+              </td>
+            </tr>
+          </table>
+          <!---[FIN CGT]--->
+        </form>
+    </div>
+</div>
+</body>
+</html>
