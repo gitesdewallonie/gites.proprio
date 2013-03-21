@@ -2,14 +2,7 @@
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
-
-<head>
-    <tal:comment replace="nothing">
-            Please note that this template will most likely be renamed to news_listing
-            in the future, so if you reference this template or its macros from
-            another template, make sure to change it when you upgrade.
-    </tal:comment>
-</head>
+<head> </head>
 <body>
 <div metal:fill-slot="main"
      tal:define="hebPk request/hebPk;
@@ -107,43 +100,21 @@
                  <td valign="center" class="maj-etiquette">Type de table d'hôte</td>
                  <td>
                      <div>
-                         <tal:boucle tal:repeat="table tableHote">
-                             <input type="checkbox"
-                                               name="hebhot_tabhot_fk"
-                                               checked=""
-                                               value=""
-                                               tal:attributes="checked python:table.tabho_pk in typeTables
-                                                               and table.tabho_pk in typeTables
-                                                               or None;
-                                                               value python:table.tabho_pk" />
-                                        <span tal:condition="python: table.tabho_pk in typeTables">
-                                                <img src=""
-                                                     alt=""
-                                                     title="Assiette gourmande"
-                                                     width="47"
-                                                     height="36"
-                                                     tal:attributes="src string:assiette_${repeat/table/number}.png;
-                                                                     alt string:assiette_${repeat/table/number}.png;
-                                                                     title table/tabho_type_fr" />
-                                                <br />
-                                                <span tal:content="table/tabho_type_fr"
-                                                      class="grasnoir" />
-                                                <br /><br />
-                                            </span>
-                                            <span tal:condition="python: table.tabho_pk not in typeTables">
-                                                <img src=""
-                                                     alt=""
-                                                     title="Assiette gourmande"
-                                                     width="47"
-                                                     height="36"
-                                                     tal:attributes="src string:assiette_${repeat/table/number}_off.png;
-                                                                     alt string:assiette_${repeat/table/number}.png;
-                                                                     title table/tabho_type_fr" />
-                                                <br />
-                                                <span tal:content="table/tabho_type_fr" />
-                                                <br /><br />
-                                        </span>
-                        </tal:boucle>
+                       <tal:block repeat="metadata python:view.get_editable_metadata('tablehote')">
+                         <input type="checkbox" name="" checked="" value="1"
+                                tal:attributes="checked python:metadata.value and 'CHECKED' or None;
+                                                name metadata/pk" />
+                         <input type="hidden" name="metadata_fk:list" value=""
+                                tal:attributes="value metadata/pk" />
+                         <img src=""
+                              title=""
+                              alt=""
+                              tal:attributes="src string:${metadata/id}.png;
+                                              alt metadata/title;
+                                              title metadata/title;"
+                              class="picto"/>
+                         <tal:block content="metadata/title" /><br />
+                       </tal:block>
                     </div>
                  </td>
               </tr>
@@ -152,7 +123,7 @@
                  <td>
                     <div tal:define="nbrEpis heb/epis">
                         <span tal:repeat="epis nbrEpis">
-                            <span tal:content="epis/heb_nombre_epis" 
+                            <span tal:content="epis/heb_nombre_epis"
                                   class="maj-donnee" />
                         </span>
                     </div>
@@ -161,244 +132,54 @@
               <tr bgcolor="#FDFFE0">
                  <td class="maj-etiquette">Activités</td>
                  <td valign="middle">
-                    <input type="checkbox"
-                           name="heb_maj_tenis"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_tenis=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_tennis.png"
-                         alt="a_tennis.png"
-                         title="Tennis"
-                         width="28"
-                         height="28" />
-                    <input type="text"
-                           name="heb_maj_tenis_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_tenis_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Tennis
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_nautisme"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_nautisme=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_voile.png"
-                         alt="a_voile.png"
-                         title="Activités nautiques"
-                         width="28"
-                         height="28" />
-                    <input type="text"
-                           name="heb_maj_nautisme_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_nautisme_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Activiés nautiques
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_sky"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_sky=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_sky.png"
-                         alt="a_sky.png"
-                         title="Ski"
-                         width="28"
-                         height="28" />
-                    <input type="text"
-                           name="heb_maj_sky_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_sky_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Ski
-                    <br/>
-                    <input type="checkbox"
-                           name="heb_maj_rando"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_rando=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_rando.png">
-                    <input type="text"
-                           name="heb_maj_rando_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_rando_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Randonnée
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_piscine"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_piscine=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_piscine.png">
-                    <input type="text"
-                           name="heb_maj_piscine_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_piscine_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Piscine
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_peche"
-                           checked="oui"
-                           value=""
-                           tal:attributes="checked python:heb.heb_peche=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_peche.png">
-                    <input type="text"
-                           name="heb_maj_peche_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_peche_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Pêche
-                    <br/>
-                    <input type="checkbox"
-                           name="heb_maj_equitation"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_equitation=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_cheval.png">
-                    <input type="text"
-                           name="heb_maj_equitation_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_equitation_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Equitation
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_velo"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_velo=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_velo.png">
-                    <input type="text"
-                           name="heb_maj_velo_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_velo_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Vélo
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_vtt"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_vtt=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_vtt.png">
-                    <input type="text"
-                           name="heb_maj_vtt_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_vtt_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    VTT
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_ravel"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_ravel=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="a_ravel.png">
-                    <input type="text"
-                           name="heb_maj_ravel_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_ravel_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Ravel
-                    <br/>
-                    </td>
-                    </tr>
-                    <tr>
-                       <td class="maj-etiquette">Informations</td>
-                       <td>
-                    <input type="checkbox"
-                           name="heb_maj_commerce"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_commerce=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="i_commerce.png" title="COMMERCE" />
-                    <input type="text"
-                           name="heb_maj_commerce_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_commerce_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Commerce
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_restaurant"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_restaurant=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="i_restaurant.png" title="RESTAURANT" />
-                    <input type="text"
-                           name="heb_maj_restaurant_distance"
-                           size="3"
-                           value=""
-                           tal:attributes="value heb/heb_restaurant_distance" />Km
-                    &nbsp;&nbsp;&nbsp;
-                    Restaurant
-                    <br />
-                    <input type="checkbox"
-                           name="heb_maj_gare"
-                           checked=""
-                           value="oui"
-                           tal:attributes="checked python:heb.heb_gare=='oui'
-                                           and 'CHECKED'or None;" />
-                    <img src="i_gare.png" title="GARE" />
-                    <input type="text"
-                           name="heb_maj_gare_distance"
-                            size="3"
-                           value=""
-                           tal:attributes="value heb/heb_gare_distance">Km
-                    &nbsp;&nbsp;&nbsp;
-                    Gare
+                    <tal:block repeat="metadata python:view.get_editable_metadata('activites')">
+                      <input type="checkbox" name="" checked="" value="1"
+                             tal:attributes="checked python:metadata.value and 'CHECKED' or None;
+                                             name metadata/pk" />
+                      <input type="hidden" name="metadata_fk:list" value=""
+                             tal:attributes="value metadata/pk" />
+                      <img src=""
+                           title=""
+                           alt=""
+                           tal:attributes="src string:${metadata/id}.png;
+                                           alt metadata/title;
+                                           title metadata/title;"
+                           class="picto"/>
+                      <tal:block content="metadata/title" /><br />
+                    </tal:block>
+                    <tal:block repeat="metadata python:view.get_editable_metadata('informations')">
+                      <input type="checkbox" name="" checked="" value="1"
+                             tal:attributes="checked python:metadata.value and 'CHECKED' or None;
+                                             name metadata/pk" />
+                      <input type="hidden" name="metadata_fk:list" value=""
+                             tal:attributes="value metadata/pk" />
+                      <img src=""
+                           title=""
+                           alt=""
+                           tal:attributes="src string:${metadata/id}.png;
+                                           alt metadata/title;
+                                           title metadata/title;"
+                           class="picto"/>
+                      <tal:block content="metadata/title" /><br />
+                    </tal:block>
                  </td>
               </tr>
-              <tr>
-                 <td class="maj-etiquette">Animaux</td>
-                 <td>
-                     <input type="checkbox"
-                            name="heb_maj_animal"
-                            checked=""
-                            value="oui"
-                            tal:attributes="checked python:heb.heb_animal=='oui'
-                                            and 'CHECKED' or '';" />
-                    <img src="c_chien.png">
-                    &nbsp;&nbsp;&nbsp;
-                    </td>
-              </tr>
-              <tr bgcolor="#FDFFE0">
-                 <td class="maj-etiquette">Fumeur</td>
-                 <td>
-                     <input type="checkbox"
-                            name="heb_maj_fumeur"
-                            checked=""
-                            value="oui"
-                            tal:attributes="checked python:heb.heb_fumeur=='oui'
-                                            and 'CHECKED' or '';" />
-                       <img src="c_fumeur.png">
-                       &nbsp;&nbsp;&nbsp;
-                    </td>
+              <tr tal:repeat="metadata python:view.get_editable_metadata('autorisations')">
+                <td tal:content="metadata/title" />
+                <td>
+                  <input type="checkbox" name="" checked="" value="1"
+                         tal:attributes="checked python:metadata.value and 'CHECKED' or None;
+                                         name metadata/pk" />
+                  <input type="hidden" name="metadata_fk:list" value=""
+                         tal:attributes="value metadata/pk" />
+                  <img src=""
+                       title=""
+                       alt=""
+                       tal:attributes="src string:${metadata/id}.png;
+                                       alt metadata/title;
+                                       title metadata/title;"
+                       class="picto"/>
+                </td>
               </tr>
            </table>
            <!---[FIN INFORMATION GENERALE]--->
@@ -509,13 +290,6 @@
                            tal:attributes="value heb/heb_tarif_chmbr_autre_1p" />
                  </td>
                  <td align="center">
-                    <!--
-                    <input type="text"
-                           name="heb_maj_tarif_chmbr_autre_2p"
-                           size="10"
-                           value=""
-                           tal:attributes="value heb/heb_tarif_chmbr_autre_2p" />
-                     -->
                  </td>
                  <td align="center">
                     <!--
@@ -694,36 +468,6 @@
                     </span>
                  </td>
               </tr>
-              <tr>
-                 <td class="maj-etiquette">Taxe de Séjour</td>
-                 <td>
-                    <!--
-                    <select name="heb_maj_taxe_sejour">
-                       <option value="non">...</option>
-                           <dtml-if "heb_taxe_sejour=='oui'">
-                           <option value="oui" selected> Oui</option>
-                           <option value="non"> Non</option>
-                           <dtml-else>
-                               <option value="oui"> Oui</option>
-                           <option value="non" selected> Non</option>
-                           </dtml-if>
-                    </select>
-                    -->
-                    <select name="heb_maj_taxe_sejour">
-                        <option value="oui"
-                                selected=""
-                                tal:attributes="selected python:heb.heb_taxe_sejour == 'oui' or None">
-                                Oui
-                        </option>
-                        <option value="non"
-                                selected=""
-                                tal:attributes="selected python:heb.heb_taxe_sejour == 'non' or None">
-                                Non
-                        </option>
-                    </select>
-                    <span tal:content="heb/heb_taxe_sejour" />
-                 </td>
-              </tr>
               <tr bgcolor="#FDFFE0">
                  <td class="maj-etiquette">Montant de la taxe</td>
                  <td>
@@ -859,120 +603,22 @@
 
                  </td>
               </tr>
-              <tr>
-                 <td>
-                     <input type="checkbox"
-                              name="heb_maj_confort_tv"
-                              checked=""
-                              value="oui"
-                              tal:attributes="checked python:heb.heb_confort_tv=='oui'
-                                              and
-                                              heb.heb_confort_tv=='oui'
-                                              or None" />
-                     <img src="c_tv.png" />
-                     &nbsp;&nbsp;&nbsp;&nbsp;
-                     TV - VIDEO
-                </td>
-              </tr>
-              <tr bgcolor="#FDFFE0">
-                 <td>
-                     <input type="checkbox"
-                              name="heb_maj_confort_feu_ouvert"
-                              checked=""
-                              value="oui"
-                              tal:attributes="checked python:heb.heb_confort_feu_ouvert=='oui'
-                                              and
-                                              heb.heb_confort_feu_ouvert=='oui'
-                                              or None" />
-                     <img src="c_feu_ouvert.png" />
-                     &nbsp;&nbsp;&nbsp;&nbsp;
-                     Feu ouvert
-                </td>
-              </tr>
-              <tr>
-                 <td>
-                     <input type="checkbox"
-                              name="heb_maj_confort_lave_vaiselle"
-                              checked=""
-                              value="oui"
-                              tal:attributes="checked python:heb.heb_confort_lave_vaiselle=='oui' 
-                                              and
-                                              heb.heb_confort_lave_vaiselle=='oui'
-                                              or None" />
-                     <img src="c_lave_vaisselle.png" />
-                     &nbsp;&nbsp;&nbsp;&nbsp;Lave-vaisselle
-                </td>
-              </tr>
-              <tr bgcolor="#FDFFE0">
+              <tr tal:repeat="metadata python:view.get_editable_metadata('confort')">
                 <td>
-                    <input type="checkbox"
-                             name="heb_maj_confort_micro_onde"
-                             checked=""
-                             value="oui"
-                             tal:attributes="checked python:heb.heb_confort_micro_onde=='oui'
-                                             and
-                                             heb.heb_confort_micro_onde=='oui'
-                                             or None" />
-                     <img src="c_micro_onde.png" />
-                     &nbsp;&nbsp;&nbsp;&nbsp;Micro-onde
+                  <input type="checkbox" name="" checked="" value="1"
+                         tal:attributes="checked python:metadata.value and 'CHECKED' or None;
+                                         name metadata/pk" />
+                  <input type="hidden" name="metadata_fk:list" value=""
+                         tal:attributes="value metadata/pk" />
+                  <img src=""
+                       title=""
+                       alt=""
+                       tal:attributes="src string:${metadata/id}.png;
+                                       alt metadata/title;
+                                       title metadata/title;"
+                       class="picto" />
                 </td>
               </tr>
-              <tr>
-                 <td>
-                     <input type="checkbox"
-                              name="heb_maj_confort_lave_linge"
-                              checked=""
-                              value="oui"
-                              tal:attributes="checked python:heb.heb_confort_lave_linge=='oui'
-                                              and
-                                              heb.heb_confort_lave_linge=='oui'
-                                              or None" />
-                     <img src="c_lave_linge.png" />
-                     &nbsp;&nbsp;&nbsp;&nbsp;Lave-linge
-                </td>
-              </tr>
-              <tr bgcolor="#FDFFE0">
-                <td>
-                     <input type="checkbox"
-                                 name="heb_maj_confort_seche_linge"
-                                 checked=""
-                                 value="oui"
-                                 tal:attributes="checked python:heb.heb_confort_seche_linge=='oui'
-                                                 and
-                                                 heb.heb_confort_seche_linge=='oui'
-                                                 or None" />
-                    <img src="c_seche_linge.png" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;Sèche-linge
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <input type="checkbox"
-                             name="heb_maj_confort_congelateur"
-                             checked=""
-                             value="oui"
-                             tal:attributes="checked python:heb.heb_confort_congelateur=='oui'
-                                             and
-                                             heb.heb_confort_congelateur=='oui'
-                                             or None" />
-                    <img src="c_congelateur.png" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;Congélateur
-                </td>
-              </tr>
-              <tr bgcolor="#FDFFE0">
-                <td>
-                    <input type="checkbox"
-                             name="heb_maj_confort_internet"
-                             checked=""
-                             value="oui"
-                             tal:attributes="checked python:heb.heb_confort_internet=='oui'
-                                             and
-                                             heb.heb_confort_internet=='oui'
-                                             or None" />
-                     <img src="c_internet.png" />
-                     &nbsp;&nbsp;&nbsp;&nbsp;Accès Internet
-                </td>
-             </tr>
           </table>
           <!---[FIN CONFORT HEB]--->
 
