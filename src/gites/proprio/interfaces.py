@@ -18,3 +18,7 @@ class IHebergementInfo(zope.interface.Interface):
         Ajoute les infos mise à jour par de l'hébergement le prorpio dans
         la table provisoire
         """
+
+
+class IProprioInfo(zope.interface.Interface):
+    """ Mise à jour Info Proprio """

@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="gites">
+
+<body>
+    
+<div metal:fill-slot="main">
+     
+    <h1>:: Modification des données proprio ::</h1>
+    <div tal:define="result view/addProprioMaj;
+                     status result/status">
+
+        <div tal:condition="python: status==1">
+            <br />
+            Vos données sont correctement enregistrées.
+            <br /> 
+            Elles vont être vérifiées et validées par notre équipe.
+            <br /><br >
+            Merci.
+        </div>
+
+        <div tal:condition="python: status==-1">
+            Un problème est survenu lors de la mise à jour de vos données.
+            Un mail a été envoyé à l'équipe des gites de Wallonie.
+        </div>    
+    </div>
+</div>
+</body>
+</html>
