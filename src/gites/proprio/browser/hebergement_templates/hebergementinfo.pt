@@ -9,6 +9,9 @@
                  hebergements python:view.getHebergementByHebPk(hebPk);
                  tableHote python:view.getTableHote();
                  typeTables python:view.getTypeTableHoteByHebPk(hebPk);">
+    <div tal:condition="python: hebergements == []">
+        <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
+    </div>
     <div tal:repeat="heb hebergements">
 
        <h1>Modification des informations de votre hébergement <span tal:content="heb/heb_nom" /></h1>
