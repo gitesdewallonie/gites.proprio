@@ -239,12 +239,10 @@ class HebergementMixin(object):
 
     def insert_metadata_updates(self, heb_pk):
         """ Inserts the updates for the metadatas """
-        metadata_list = self.get_metadata(heb_pk)
+        metadata_list = self.get_metadata(heb_pk, editable=True)
         for current_metadata in metadata_list:
             metadata_id = str(current_metadata.metadata_fk)
-            value = self.request.get(metadata_id) or \
-                        current_metadata.link_met_value
-            value = bool(value)
+            value = bool(self.request.get(metadata_id) or False)
             if value != current_metadata.link_met_value:
                 update = mappers.LinkHebergementMetadataUpdate(
                     link_met_fk=current_metadata.link_met_pk,
@@ -260,9 +258,15 @@ class HebergementMixin(object):
             editable=True,
             type=metadata_type)
 
-    def get_metadata(self, heb_pk):
-        """ Returns all the metadata """
-        return mappers.LinkHebergementMetadata.get(heb_fk=heb_pk)
+    def get_metadata(self, heb_pk, editable=None):
+        """ Returns all the metadata for the given heb pk """
+        session = getSAWrapper('gites_wallons').session
+        query = session.query(mappers.LinkHebergementMetadata)
+        query = query.join('metadata_info')
+        query = query.filter(mappers.LinkHebergementMetadata.heb_fk == heb_pk)
+        if editable is not None:
+            query = query.filter(mappers.Metadata.met_editable == editable)
+        return query.all()
 
 
 class HebergementInfo(grok.View, HebergementMixin):
