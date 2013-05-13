@@ -1,12 +1,17 @@
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:five="http://namespaces.zope.org/five"
-           xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:grok="http://namespaces.zope.org/grok"
+           xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="gites">
 
   <grok:grok package=".hebergement" />
   <grok:grok package=".proprio" />
   <grok:grok package=".gallery" />
+
+  <browser:resourceDirectory
+      name="gdwproprio"
+      directory="resources/"
+      permission="zope2.View"
+      />
 
 </configure>

@@ -2,20 +2,40 @@
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
-<head> </head>
+
+<metal:javascript_head_slot fill-slot="javascript_head_slot">
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.ui.widget.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.iframe-transport.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.fileupload.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++gdwproprio/galleryedit.js"></script>
+</metal:javascript_head_slot>
+
+<metal:css fill-slot="css_slot">
+  <!-- <link rel="stylesheet"
+        type="text/css"
+        tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++resource++gdwcore/heblisting.css" /> -->
+</metal:css>
+
 <body>
 <div metal:fill-slot="main"
      tal:define="hebPk request/hebPk;
-                 hebergements python:view.getHebergementByHebPk(hebPk);
-                 videoInfos python:view.getHebergementVideo(hebPk)">
+                 heb python:view.getHebergementByHebPk(hebPk)">
 
-    <div tal:condition="python: hebergements == []">
+    <div tal:condition="not: heb">
         <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
     </div>
 
-    <div tal:define="heb python: hebergements[0];
-                     result view/updateGallery;
-                     status result/status">
+    <div tal:define="result view/updateGallery;
+                     status result/status;
+                     videoInfos python:view.getHebergementVideo(hebPk)">
        <h1>Edition de la galerie photos & vidéo de votre hébergement <span tal:content="heb/heb_nom" /></h1>
        <p>
        Ce formulaire vous permet de modifier les photos et la vidéo de la galerie de votre hébergement.<br />
@@ -43,33 +63,83 @@
            </div>
        </tal:if>
 
-       <form action="gallery-info"
-             method="post">
+       <fieldset class="bordered">
+           <legend>Edition des photos</legend>
 
-           <label for="video_url">Vidéo (facultatif) : </label>
-           <input type="text"
-                  name="video_url"
-                  id="video_url"
-                  placeholder="Adresse de votre vidéo (exemple : http://www.youtube.com/watch?v=mQNk9xSErBg)"
-                  size="70"
-                  value=""
-                  tal:attributes="value python: videoInfos and videoInfos.heb_vid_url or ''">
+           <form action="gallery-info"
+                 method="post"
+                 id="gallery-form">
 
-           <span class="discreet" tal:condition="videoInfos">
-               (mise à jour le <span tal:replace="python: videoInfos.heb_vid_date.strftime('%d/%m/%Y')" />)
-           </span>
+               <label for="file">Ajouter une photo : </label>
+               <input id="fileupload" type="file" name="file" id="file"
+                      accept="image/gif, image/jpeg, image/png">
 
-           <input type="hidden"
-                  name="hebPk"
-                  value=""
-                  tal:attributes="value heb/heb_pk" />
+               <br /><br />
 
-           <br /><br />
+               <div id="progress">
+                   <div class="bar"></div>
+               </div>
 
-           <input type="submit"
-                  value="Modifier ma galerie" />
+               <div id="uploaded-file">
+               </div>
 
-        </form>
+               <br /><br />
+
+               <input type="hidden"
+                      name="hebPk"
+                      value=""
+                      tal:attributes="value heb/heb_pk" />
+
+               <input type="submit"
+                      value="Modifier la galerie" />
+
+            </form>
+       </fieldset>
+
+       <fieldset class="bordered">
+           <legend>Edition de la vidéo</legend>
+
+           <form action="gallery-info"
+                 method="post"
+                 id="video-form">
+
+               <label for="video_url">Vidéo (facultative) : </label>
+               <input type="text"
+                      name="video_url"
+                      id="video_url"
+                      placeholder="Adresse de votre vidéo (exemple : http://www.youtube.com/watch?v=mQNk9xSErBg)"
+                      size="70"
+                      value=""
+                      tal:attributes="value python: videoInfos and videoInfos.heb_vid_url or ''">
+
+               <span class="discreet" tal:condition="videoInfos">
+                   (mise à jour le <span tal:replace="python: videoInfos.heb_vid_date.strftime('%d/%m/%Y')" />)
+               </span>
+
+               <tal:if tal:condition="videoInfos/heb_vid_url | nothing">
+                   <br /><br />
+                   <div class="video-details"
+                         tal:define="videoDetails python: view.getInformationsForVideo(videoInfos.heb_vid_url)">
+                       <h3><span tal:replace="videoDetails/title" /></h3>
+                       <img src=""
+                            tal:attributes="src videoDetails/thumb">
+                   </div>
+               </tal:if>
+
+               <br /><br />
+
+               <input type="hidden"
+                      name="hebPk"
+                      value=""
+                      tal:attributes="value heb/heb_pk" />
+
+               <input type="submit"
+                      value="Modifier la vidéo" />
+
+
+            </form>
+       </fieldset>
+
     </div>
 
 </div>

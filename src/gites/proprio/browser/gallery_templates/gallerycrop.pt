@@ -1,0 +1,30 @@
+<script type="text/javascript"
+        charset="utf-8"
+        tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/js/jquery.Jcrop.js"></script>
+<link rel="stylesheet"
+      type="text/css"
+      tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/css/jquery.Jcrop.css" />
+
+<script type="text/javascript">
+  jQuery(function($){
+    $('#image-to-crop').Jcrop();
+  });
+</script>
+
+<div tal:define="hebPk request/hebPk;
+                 heb python:view.getHebergementByHebPk(hebPk)">
+
+    <div tal:condition="not: heb">
+        <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
+    </div>
+
+    <div>
+       <p>
+            Vous devez couper l'image pour qu'elle ait les dimentions nécessaires.
+       </p>
+
+       <img src="http://i3.ytimg.com/vi/nZcRU0Op5P4/hqdefault.jpg" id="image-to-crop" />
+
+    </div>
+
+</div>
