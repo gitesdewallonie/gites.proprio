@@ -16,11 +16,12 @@
     <div tal:define="heb python: hebergements[0];
                      result view/updateGallery;
                      status result/status">
-       <h1>Edition de la gallerie photos / vidéo de votre hébergement <span tal:content="heb/heb_nom" /></h1>
+       <h1>Edition de la galerie photos & vidéo de votre hébergement <span tal:content="heb/heb_nom" /></h1>
        <p>
-       Ce formulaire vous permet de modifier les photos et la vidéo de la gallerie de votre hébergement.<br />
+       Ce formulaire vous permet de modifier les photos et la vidéo de la galerie de votre hébergement.<br />
        Cette galerie publique est visible à l'adresse :
        <a href=""
+          target="_blank"
           tal:define="hebUrl heb/@@url_heb"
           tal:attributes="href hebUrl"
           tal:content="hebUrl">Adresse de la fiche descriptive</a>
@@ -31,22 +32,24 @@
        contact avec nos bureaux au 081 311 800.
        </p>
 
-       <tal:if tal:condition="status">
+       <tal:if tal:condition="python: status is not None">
            <div class="info-center"
                 tal:condition="python: status == 1">
                 Vos changements ont bien été pris en compte.
            </div>
            <div class="error-center"
                 tal:condition="python: status == 0">
-                L'adresse de votre vidéo n'est pas supportée.
+                L'adresse de votre vidéo est inconnue ou n'est pas supportée.
            </div>
        </tal:if>
 
        <form action="gallery-info"
              method="post">
 
+           <label for="video_url">Vidéo (facultatif) : </label>
            <input type="text"
                   name="video_url"
+                  id="video_url"
                   placeholder="Adresse de votre vidéo (exemple : http://www.youtube.com/watch?v=mQNk9xSErBg)"
                   size="70"
                   value=""
@@ -64,7 +67,7 @@
            <br /><br />
 
            <input type="submit"
-                  value="Modifier ma gallerie" />
+                  value="Modifier ma galerie" />
 
         </form>
     </div>

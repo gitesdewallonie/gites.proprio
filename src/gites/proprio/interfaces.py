@@ -25,4 +25,4 @@ class IProprioInfo(zope.interface.Interface):
 
 
 class IGalleryInfo(zope.interface.Interface):
-    """ Mise à jour Gallerie Proprio """
+    """ Mise à jour Galerie Proprio """
