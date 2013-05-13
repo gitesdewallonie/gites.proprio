@@ -27,6 +27,7 @@ setup(
         'five.grok',
         'gites.core',
         'gites.db',
+        'Embedly',
     ],
     entry_points="""
     # -*- Entry points: -*-

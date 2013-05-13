@@ -24,4 +24,15 @@
            <b tal:replace="gite/title"/>
         </a>
     </div>
+    <div id="titre-hebergement">
+        Gallerie de photos
+    </div>
+    <div id="maj-info-menu"
+         tal:repeat="gite viewlet/getGitesForProprio">
+        <a href=""
+           tal:attributes="href string:${portal_url}/zone-membre/gallery-info?hebPk=${gite/token};
+                           title gite/title">
+           <b tal:replace="gite/title"/>
+        </a>
+    </div>
 </div>

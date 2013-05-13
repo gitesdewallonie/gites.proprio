@@ -22,3 +22,7 @@ class IHebergementInfo(zope.interface.Interface):
 
 class IProprioInfo(zope.interface.Interface):
     """ Mise à jour Info Proprio """
+
+
+class IGalleryInfo(zope.interface.Interface):
+    """ Mise à jour Gallerie Proprio """

@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<head> </head>
+<body>
+<div metal:fill-slot="main"
+     tal:define="hebPk request/hebPk;
+                 hebergements python:view.getHebergementByHebPk(hebPk);
+                 videoInfos python:view.getHebergementVideo(hebPk)">
+
+    <div tal:condition="python: hebergements == []">
+        <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
+    </div>
+
+    <div tal:define="heb python: hebergements[0];
+                     result view/updateGallery;
+                     status result/status">
+       <h1>Edition de la gallerie photos / vidéo de votre hébergement <span tal:content="heb/heb_nom" /></h1>
+       <p>
+       Ce formulaire vous permet de modifier les photos et la vidéo de la gallerie de votre hébergement.<br />
+       Cette galerie publique est visible à l'adresse :
+       <a href=""
+          tal:define="hebUrl heb/@@url_heb"
+          tal:attributes="href hebUrl"
+          tal:content="hebUrl">Adresse de la fiche descriptive</a>
+       </p>
+       <p>
+       Si vous souhaitez obtenir des informations complémentaires ou si vous
+       éprouvez des difficultés à compléter ce formulaire, merci de prendre
+       contact avec nos bureaux au 081 311 800.
+       </p>
+
+       <tal:if tal:condition="status">
+           <div class="info-center"
+                tal:condition="python: status == 1">
+                Vos changements ont bien été pris en compte.
+           </div>
+           <div class="error-center"
+                tal:condition="python: status == 0">
+                L'adresse de votre vidéo n'est pas supportée.
+           </div>
+       </tal:if>
+
+       <form action="gallery-info"
+             method="post">
+
+           <input type="text"
+                  name="video_url"
+                  placeholder="Adresse de votre vidéo (exemple : http://www.youtube.com/watch?v=mQNk9xSErBg)"
+                  size="70"
+                  value=""
+                  tal:attributes="value python: videoInfos and videoInfos.heb_vid_url or ''">
+
+           <span class="discreet" tal:condition="videoInfos">
+               (mise à jour le <span tal:replace="python: videoInfos.heb_vid_date.strftime('%d/%m/%Y')" />)
+           </span>
+
+           <input type="hidden"
+                  name="hebPk"
+                  value=""
+                  tal:attributes="value heb/heb_pk" />
+
+           <br /><br />
+
+           <input type="submit"
+                  value="Modifier ma gallerie" />
+
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

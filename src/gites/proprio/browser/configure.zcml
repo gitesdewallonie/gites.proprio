@@ -7,5 +7,6 @@
 
   <grok:grok package=".hebergement" />
   <grok:grok package=".proprio" />
+  <grok:grok package=".gallery" />
 
 </configure>
