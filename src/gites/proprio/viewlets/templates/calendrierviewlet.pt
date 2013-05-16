@@ -1,11 +1,9 @@
-<div id="calendrier"
+<div id="calendrier-zone-proprio"
      tal:condition='viewlet/isVisible'
      tal:define="portal_url context/@@plone_portal_state/portal_url;
                  hasActive viewlet/hasActiveConfiguration;
                  isBlocked viewlet/isBlocked">
-    <div id="titre-calendrier">
-        Calendrier
-    </div>
+    <h2>Calendrier</h2>
     <tal:boucle tal:condition="python: hasActive and not isBlocked"
                 tal:repeat="gite viewlet/getGitesForProprio">
         <a href=""

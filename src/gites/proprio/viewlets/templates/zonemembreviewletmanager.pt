@@ -1,4 +1,5 @@
-<div id="zone-membre" tal:condition='viewletmanager/available'>
+<div id="zone-membre"
+     tal:condition='viewletmanager/available'>
     <h2>Zone Membre</h2>
     <tal:viewlets repeat="viewlet viewletmanager/viewlets">
         <tal:viewlet tal:replace="structure python:viewlet.render()" />

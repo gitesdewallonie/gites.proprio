@@ -1,9 +1,7 @@
 <div id="maj-info"
      tal:condition='viewlet/isVisible'
      tal:define="portal_url context/@@plone_portal_state/portal_url">
-    <div id="titre-maj-info">
-        Mise à jour des infos
-    </div>
+    <h2>Mise à jour des infos</h2>
     <div id="titre-mes-donnees">
         Mes données
     </div>
