@@ -120,7 +120,7 @@
                    <tal:if tal:condition="vignettes">
                        <br />
 
-                       <i><strong>Note</strong> : la première photo sert de mignature pour votre hébergement dans les listing de recherches, etc.</i>
+                       <i><strong>Note</strong> : la première photo sert de miniature pour votre hébergement dans les listing de recherches, etc.</i>
                        <br /><br />
 
                        <input type="submit"
