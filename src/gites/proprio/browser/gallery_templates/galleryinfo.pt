@@ -80,10 +80,9 @@
                        <input id="fileupload" type="file" name="file" id="file" size="30"
                               accept="image/gif, image/jpeg, image/png">
 
-                       <br />
+                       <br /><br />
 
                        <div id="progress"  style="display:none">
-                           <br />
                            <div class="bar"></div>
                        </div>
                        <br />

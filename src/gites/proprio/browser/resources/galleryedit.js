@@ -49,7 +49,7 @@ jQuery(document).ready(function($) {
         },
         progressall: function (e, data) {
             $("#error-message").hide();
-            $("#progress").hide();
+            $("#progress").show();
             var progress = parseInt(data.loaded / data.total * 100, 10);
             var percentVal = progress + '%';
             $('#progress .bar').css(
