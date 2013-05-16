@@ -97,6 +97,20 @@ class HebergementMixin(object):
                           os.path.join(dirPath, newName))
             index += 1
 
+    def createVignette(self, hebPk):
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        hebergement = self.getHebergementByHebPk(hebPk)
+        codeGDW = hebergement.heb_code_gdw
+        firstPhoto = "%s00.jpg" % codeGDW
+        vignetteStorage = getattr(portal, 'vignettes_heb')
+        photoStorage = getattr(portal, 'photos_heb')
+        origin = '%s/%s' % (photoStorage.basepath, firstPhoto)
+        destination = '%s/%s' % (vignetteStorage.basepath, firstPhoto)
+        img = Image.open(origin)
+        img = img.resize((60, 39), Image.ANTIALIAS)
+        img.save(destination, "JPEG")
+
 
 class GalleryInfo(grok.View, HebergementMixin):
     grok.context(zope.interface.Interface)
@@ -291,6 +305,7 @@ class GallerySave(grok.View, HebergementMixin):
         img.save(destination, "JPEG")
         os.unlink(origin)
         self.compactVignettes(hebPk)
+        self.createVignette(hebPk)
         portalUrl = getToolByName(self.context, 'portal_url')()
         self.request.response.redirect("%s/zone-membre/gallery-info?hebPk=%s" % (portalUrl, hebPk))
         return ''
