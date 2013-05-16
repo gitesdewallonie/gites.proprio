@@ -6,7 +6,6 @@ from zope.schema.interfaces import IVocabularyFactory
 from plone.memoize.instance import memoize
 from z3c.sqlalchemy import getSAWrapper
 from gites.calendar.vocabulary import getHebergementsForProprio
-from Products.CMFCore.utils import getToolByName
 
 grok.templatedir('templates')
 grok.context(interface.Interface)
@@ -14,8 +13,10 @@ grok.context(interface.Interface)
 
 class ZoneMembreViewletManager(grok.ViewletManager):
     grok.name('gites.zonemembre')
+
     def available(self):
         return "zone-membre" in self.context.getPhysicalPath()
+
 
 class CalendrierViewlet(grok.Viewlet):
     grok.order(10)
@@ -55,6 +56,7 @@ class CalendrierViewlet(grok.Viewlet):
     @memoize
     def getGitesForProprio(self):
         return getUtility(IVocabularyFactory, name='proprio.hebergements')(self.context)
+
 
 class MajInfosViewlet(grok.Viewlet):
     grok.order(20)

@@ -7,9 +7,11 @@ Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
 
+import os
 import simplejson
 from datetime import datetime
 from embedly import Embedly
+from PIL import Image, ImageFile
 import zope.interface
 from zope.component import getUtility
 from five import grok
@@ -74,25 +76,26 @@ class HebergementMixin(object):
         hebergement = self.getHebergementByHebPk(hebPk)
         codeGDW = hebergement.heb_code_gdw
         listeImage = self.context.photos_heb.fileIds()
-        for i in range(15):
+        for i in range(40):
             photo = "%s%02d.jpg" % (codeGDW, i)
             if photo in listeImage:
                 vignettes.append(photo)
         return vignettes
 
-    def getNextVignette(self, hebPk):
-        vignettes = []
-        hebergement = self.getHebergementByHebPk(hebPk)
-        codeGDW = hebergement.heb_code_gdw
-        listeImage = self.context.photos_heb.fileIds()
-        for i in range(15):
-            photo = "%s%02d.jpg" % (codeGDW, i)
-            if photo in listeImage:
-                vignettes.append(photo)
-        if not vignettes:
-            return "%s00.jpg" % codeGDW
-        else:
-            return vignettes[-1]
+    def compactVignettes(self, hebPk):
+        existingVignettes = self.getVignettes(hebPk)
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        photoStorage = getattr(portal, 'photos_heb')
+        dirPath = photoStorage.basepath
+        index = 0
+        for vignette in existingVignettes:
+            existingVignetteNumber = vignette[-6:-4]
+            if int(existingVignetteNumber) != index:
+                newName = "%s%02d.jpg" % (vignette[:-6], index)
+                os.rename(os.path.join(dirPath, vignette),
+                          os.path.join(dirPath, newName))
+            index += 1
 
 
 class GalleryInfo(grok.View, HebergementMixin):
@@ -100,6 +103,39 @@ class GalleryInfo(grok.View, HebergementMixin):
     grok.name(u'gallery-info')
     grok.require('zope2.Public')
     grok.implements(interfaces.IGalleryInfo)
+
+    def __call__(self):
+        fields = self.request.form
+        hebPk = fields.get('hebPk')
+        if fields.get('images-orders', None) is None:
+            self.compactVignettes(hebPk)
+            return super(GalleryInfo, self).__call__()
+        imagesOrder = fields.get('images-orders').split('|')
+        imagesOrder = [img for img in imagesOrder if img]
+        hebergement = self.getHebergementByHebPk(hebPk)
+        codeGDW = hebergement.heb_code_gdw
+
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        photoStorage = getattr(portal, 'photos_heb')
+        dirPath = photoStorage.basepath
+        listeImage = photoStorage.fileIds()
+        # we need to re-order image files by renaming them
+        for i in range(40):
+            photo = "%s%02d.jpg" % (codeGDW, i)
+            if photo in listeImage:
+                if photo not in imagesOrder:
+                    os.unlink(os.path.join(dirPath, photo))
+                else:
+                    os.rename(os.path.join(dirPath, photo),
+                              os.path.join(dirPath, "%s_rn" % photo))
+        index = 0
+        for image in imagesOrder:
+            newName = "%s%02d.jpg" % (codeGDW, index)
+            os.rename(os.path.join(dirPath, "%s_rn" % image),
+                      os.path.join(dirPath, newName))
+            index += 1
+        return super(GalleryInfo, self).__call__()
 
     def getHebergementVideo(self, hebPk):
         wrapper = getSAWrapper('gites_wallons')
@@ -173,13 +209,30 @@ class GalleryUpload(grok.View, HebergementMixin):
     def __call__(self):
         fields = self.request.form
         hebPk = fields.get('hebPk')
+        message = ''
         fileUpload = fields.get('file')
-        lastImageName = self.getNextVignette(hebPk)
+        img = Image.open(fileUpload.name)
+        width, height = img.size
+        if width < 580 or height < 377:
+            message = 'Votre image est trop petite : elle doit faire au moins 580px de large et 377px de haut.'
+            return simplejson.dumps({'hebPk': hebPk,
+                                     'filename': fileUpload.filename,
+                                     'message': message,
+                                     'status': -1})
+
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        tmpStorage = getattr(portal, 'photos_heb_tmp')
+        destination = '%s/%s.jpg' % (tmpStorage.basepath, hebPk)
+        ImageFile.MAXBLOCK = width * height
+        img.save(destination, "JPEG")
         self.request.response.setHeader('content-type', 'text/x-json')
         self.request.response.setHeader('Cache-Control', 'no-cache')
         return simplejson.dumps({'hebPk': hebPk,
                                  'filename': fileUpload.filename,
-                                 'imageName': lastImageName})
+                                 'width': width,
+                                 'message': message,
+                                 'status': 1})
 
 
 class GalleryCrop(grok.View, HebergementMixin):
@@ -187,3 +240,57 @@ class GalleryCrop(grok.View, HebergementMixin):
     grok.name(u'crop-image')
     grok.require('zope2.Public')
     grok.implements(interfaces.IGalleryInfo)
+
+
+class GallerySave(grok.View, HebergementMixin):
+    grok.context(zope.interface.Interface)
+    grok.name(u'save-image')
+    grok.require('zope2.Public')
+    grok.implements(interfaces.IGalleryInfo)
+
+    def render(self):
+        pass
+
+    def __call__(self):
+        fields = self.request.form
+        hebPk = fields.get('hebPk')
+        coordX = int(fields.get('x'))
+        if coordX < 0:
+            coordX = 0
+        coordY = int(fields.get('y'))
+        if coordY < 0:
+            coordY = 0
+        width = int(float(fields.get('w')))
+        height = int(float(fields.get('h')))
+        scale = fields.get('scale', '')
+
+        hebergement = self.getHebergementByHebPk(hebPk)
+        codeGDW = hebergement.heb_code_gdw
+
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        tmpStorage = getattr(portal, 'photos_heb_tmp')
+        origin = '%s/%s.jpg' % (tmpStorage.basepath, hebPk)
+        photoStorage = getattr(portal, 'photos_heb')
+        destination = '%s/%s39.jpg' % (photoStorage.basepath, codeGDW)
+        img = Image.open(origin)
+
+        if scale:
+            imgWidth, imgHeight = img.size
+            scaling = float(1000) / imgWidth
+            coordX = float(coordX) * scaling
+            coordY = float(coordY) * scaling
+            width = float(width) * scaling
+            height = float(height) * scaling
+        box = (int(coordX), int(coordY),
+               int(coordX + width), int(coordY + height))
+        img = img.crop(box)
+        img.save(destination, "JPEG")
+        img = Image.open(destination)
+        img = img.resize((580, 377), Image.ANTIALIAS)
+        img.save(destination, "JPEG")
+        os.unlink(origin)
+        self.compactVignettes(hebPk)
+        portalUrl = getToolByName(self.context, 'portal_url')()
+        self.request.response.redirect("%s/zone-membre/gallery-info?hebPk=%s" % (portalUrl, hebPk))
+        return ''

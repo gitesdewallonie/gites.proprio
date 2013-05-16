@@ -7,11 +7,26 @@
 
 <script type="text/javascript">
   jQuery(function($){
-    $('#image-to-crop').Jcrop();
+
+    $('#image-to-crop').Jcrop({
+        aspectRatio: 1/0.65,
+        onSelect: updateCoords,
+        onChange: updateCoords,
+        setSelect: [10, 10, 580, 377]
+    });
+
+    function updateCoords(c)
+      {
+        $('#x').val(c.x);
+        $('#y').val(c.y);
+        $('#w').val(c.w);
+        $('#h').val(c.h);
+      };
   });
 </script>
 
 <div tal:define="hebPk request/hebPk;
+                 width request/width;
                  heb python:view.getHebergementByHebPk(hebPk)">
 
     <div tal:condition="not: heb">
@@ -20,10 +35,38 @@
 
     <div>
        <p>
-            Vous devez couper l'image pour qu'elle ait les dimentions nécessaires.
+            Vous devez couper l'image pour qu'elle ait les dimensions nécessaires.
        </p>
 
-       <img src="http://i3.ytimg.com/vi/nZcRU0Op5P4/hqdefault.jpg" id="image-to-crop" />
+       <form onsubmit="return checkCoords();" method="post" action="save-image">
+
+
+           <tal:if condition="python: int(width) > 1000">
+               <img src="" id="image-to-crop"
+                    width="1000"
+                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg" />
+               <input type="hidden" name="scale" value="1000">
+           </tal:if>
+
+           <tal:if condition="python: int(width) <= 1000">
+               <img src="" id="image-to-crop"
+                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg" />
+               <input type="hidden" name="scale" value="">
+           </tal:if>
+
+           <input id="x" type="hidden" name="x" value="">
+           <input id="y" type="hidden" name="y" value="">
+           <input id="w" type="hidden" name="w" value="">
+           <input id="h" type="hidden" name="h" value="">
+
+           <input type="hidden" name="hebPk" value=""
+                  tal:attributes="value heb/heb_pk">
+
+           <br />
+
+           <input type="submit" value="Sauvegarder l'image">
+
+       </form>
 
     </div>
 

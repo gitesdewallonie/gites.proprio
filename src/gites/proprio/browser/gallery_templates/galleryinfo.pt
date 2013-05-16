@@ -62,38 +62,74 @@
                 L'adresse de votre vidéo est inconnue ou n'est pas supportée.
            </div>
        </tal:if>
+       <div id="error-message" class="error-center" style="display:none">
+           Error message filled by javascript
+       </div>
 
        <fieldset class="bordered">
            <legend>Edition des photos</legend>
 
-           <form action="gallery-info"
-                 method="post"
-                 id="gallery-form">
+           <span id="gallery-edition-fieldset">
+               <form action="gallery-info"
+                     method="post"
+                     id="gallery-form"
+                     tal:define="vignettes python: view.getVignettes(hebPk)">
 
-               <label for="file">Ajouter une photo : </label>
-               <input id="fileupload" type="file" name="file" id="file"
-                      accept="image/gif, image/jpeg, image/png">
+                   <tal:if tal:condition="python: len(vignettes) < 40">
+                       <label for="file">Ajouter une photo : </label>
+                       <input id="fileupload" type="file" name="file" id="file" size="30"
+                              accept="image/gif, image/jpeg, image/png">
 
-               <br /><br />
+                       <br />
 
-               <div id="progress">
-                   <div class="bar"></div>
-               </div>
+                       <div id="progress"  style="display:none">
+                           <br />
+                           <div class="bar"></div>
+                       </div>
+                       <br />
+                   </tal:if>
 
-               <div id="uploaded-file">
-               </div>
+                   <div id="gallery-edition">
+                       <tal:bcl tal:repeat="vignette vignettes">
+                           <div id=""
+                                class="photo"
+                                tal:define="index repeat/vignette/index"
+                                tal:attributes="id vignette;
+                                                class python: int(index) == 0 and 'photo first' or 'photo'">
+                                <div class="actions">
+                                    <div class="delete"></div>
+                                    <div class="drag"></div>
+                                </div>
+                                <img src="" title="" alt="" height="150"
+                                     tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb/${vignette}" />
+                           </div>
+                       </tal:bcl>
+                       <div class="visualClear"></div>
+                   </div>
 
-               <br /><br />
+                   <input type="hidden"
+                          name="hebPk"
+                          value=""
+                          tal:attributes="value heb/heb_pk" />
 
-               <input type="hidden"
-                      name="hebPk"
-                      value=""
-                      tal:attributes="value heb/heb_pk" />
+                   <input type="hidden"
+                          id="images-orders"
+                          name="images-orders"
+                          value=""
+                          tal:attributes="value python: '|'.join(vignettes)" />
 
-               <input type="submit"
-                      value="Modifier la galerie" />
+                   <tal:if tal:condition="vignettes">
+                       <br />
 
-            </form>
+                       <i><strong>Note</strong> : la première photo sert de mignature pour votre hébergement dans les listing de recherches, etc.</i>
+                       <br /><br />
+
+                       <input type="submit"
+                              value="Sauvegarder la galerie" />
+                   </tal:if>
+
+                </form>
+           </span>
        </fieldset>
 
        <fieldset class="bordered">
@@ -135,7 +171,6 @@
 
                <input type="submit"
                       value="Modifier la vidéo" />
-
 
             </form>
        </fieldset>
