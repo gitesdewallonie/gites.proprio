@@ -225,6 +225,15 @@ class GalleryUpload(grok.View, HebergementMixin):
         hebPk = fields.get('hebPk')
         message = ''
         fileUpload = fields.get('file')
+
+        extension = fileUpload.filename.split('.')[-1]
+        if not extension.lower() in ['jpg', 'jpeg', 'png', 'gif']:
+            message = 'Votre image doit être au format JPEG, PNG ou GIF.'
+            return simplejson.dumps({'hebPk': hebPk,
+                                     'filename': fileUpload.filename,
+                                     'message': message,
+                                     'status': -1})
+
         img = Image.open(fileUpload.name)
         width, height = img.size
         if width < 580 or height < 377:
