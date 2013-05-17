@@ -3,13 +3,21 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
 
-<head>
-    <tal:comment replace="nothing">
-            Please note that this template will most likely be renamed to news_listing
-            in the future, so if you reference this template or its macros from
-            another template, make sure to change it when you upgrade.
-    </tal:comment>
-</head>
+<metal:javascript_head_slot fill-slot="javascript_head_slot">
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.ui.widget.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.iframe-transport.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.fileupload.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++gdwproprio/galleryedit.js"></script>
+</metal:javascript_head_slot>
+
 <body>
 <div metal:fill-slot="main"
      tal:define="proprio python:view.getProprioByLogin()">
@@ -31,13 +39,54 @@
       transmis aux Gîtes de Wallonie qui vérifieront et valideront
       vos données. Dès que celles-ci seront validées, elles apparaitront sur le site.
     </p>
-    <hr />
 
-    <div align="center">
+
+       <fieldset id="proprio-photo-edition-fieldset" class="bordered">
+           <legend>Edition de la photo de contact (photo du propriétaire)</legend>
+
+           <div id="photoproprio-edition-fieldset">
+               <i>La photo que vous choisissez sera visible dans l'onglet contact du descriptif de vos hébergements.</i><br /><br />
+               <form action="proprio-info"
+                     method="post"
+                     id="proprio-form"
+                     tal:define="proPk proprio/pro_pk;
+                                 photocontact python: view.getPhotoContact(proPk)">
+
+                   <div id="description-photo-proprio">
+                       <img src="" width="196" height="170"
+                            tal:condition="photocontact"
+                            tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg" />
+                   </div>
+
+                   <br />
+
+                   <label for="file">Modifier votre photo : </label>
+                   <input id="fileupload-proprio" type="file" name="file" size="30"
+                          accept="image/gif, image/jpeg, image/png">
+
+                   <br /><br />
+
+                   <div id="progress"  style="display:none">
+                       <div class="bar"></div>
+                   </div>
+                   <br />
+
+                   <input type="hidden"
+                          name="proPk"
+                          value=""
+                          tal:attributes="value proPk" />
+
+                </form>
+           </div>
+       </fieldset>
+
+
+       <fieldset id="proprio-edition-fieldset" class="bordered">
+        <legend>Edition des données du propriétaire</legend>
         <form name="formulaire_creation"
               action="maj-info_proprio-insertion"
               method="post">
-            <table class="maj-info">
+            <table id="proprio-edition" class="maj-info">
                  <tr>
                     <td class="maj-etiquette">PK Proprio</td>
                     <td>
@@ -222,7 +271,7 @@
             </table>
         </form>
         <br />
-    </div>
+       </fieldset>
 </div>
 </body>
 </html>

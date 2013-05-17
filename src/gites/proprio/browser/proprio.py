@@ -6,13 +6,17 @@ Created by mpeeters
 Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
-from five import grok
+import os
+import simplejson
+from PIL import Image, ImageFile
 import zope.interface
+from five import grok
 from z3c.sqlalchemy import getSAWrapper
+from Products.CMFCore.utils import getToolByName
 
 from gites.core.mailer import Mailer
 
-from gites.proprio.interfaces import IProprioInfo
+from gites.proprio import interfaces
 from gites.proprio.browser.common import ZoneMembreMixin
 
 
@@ -177,11 +181,125 @@ class ProprioInfo(grok.View, ProprioMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'proprio-info')
     grok.require('zope2.Public')
-    grok.implements(IProprioInfo)
+    grok.implements(interfaces.IProprioInfo)
+
+    def getPhotoContact(self, proPk):
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        photoStorage = getattr(portal, 'photos_proprio')
+        photoName = "%s.jpg" % proPk
+        if photoName in photoStorage.fileIds():
+            return photoName
+        else:
+            return None
 
 
 class ProprioInfoInsert(grok.View, ProprioMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'maj-info_proprio-insertion')
     grok.require('zope2.Public')
-    grok.implements(IProprioInfo)
+    grok.implements(interfaces.IProprioInfo)
+
+
+class ProprioPhotoUpload(grok.View, ZoneMembreMixin):
+    grok.context(zope.interface.Interface)
+    grok.name(u'upload-image-proprio')
+    grok.require('zope2.Public')
+    grok.implements(interfaces.IGalleryInfo)
+
+    def render(self):
+        pass
+
+    def __call__(self):
+        fields = self.request.form
+        proPk = fields.get('proPk')
+        message = ''
+        fileUpload = fields.get('file')
+
+        extension = fileUpload.filename.split('.')[-1]
+        if not extension.lower() in ['jpg', 'jpeg', 'png', 'gif']:
+            message = 'Votre image doit être au format JPEG, PNG ou GIF.'
+            return simplejson.dumps({'proPk': proPk,
+                                     'filename': fileUpload.filename,
+                                     'message': message,
+                                     'status': -1})
+
+        img = Image.open(fileUpload.name)
+        width, height = img.size
+        if width < 196 or height < 170:
+            message = 'Votre image est trop petite : elle doit faire au moins 196px de large et 170px de haut.'
+            return simplejson.dumps({'proPk': proPk,
+                                     'filename': fileUpload.filename,
+                                     'message': message,
+                                     'status': -1})
+
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        tmpStorage = getattr(portal, 'photos_proprio_tmp')
+        destination = '%s/%s.jpg' % (tmpStorage.basepath, proPk)
+        ImageFile.MAXBLOCK = width * height
+        img.save(destination, "JPEG")
+        self.request.response.setHeader('content-type', 'text/x-json')
+        self.request.response.setHeader('Cache-Control', 'no-cache')
+        return simplejson.dumps({'proPk': proPk,
+                                 'filename': fileUpload.filename,
+                                 'width': width,
+                                 'message': message,
+                                 'status': 1})
+
+
+class ProprioPhotoCrop(grok.View, ZoneMembreMixin):
+    grok.context(zope.interface.Interface)
+    grok.name(u'crop-image-proprio')
+    grok.require('zope2.Public')
+    grok.implements(interfaces.IGalleryInfo)
+
+
+class ProprioPhotoSave(grok.View, ZoneMembreMixin):
+    grok.context(zope.interface.Interface)
+    grok.name(u'save-image-proprio')
+    grok.require('zope2.Public')
+    grok.implements(interfaces.IGalleryInfo)
+
+    def render(self):
+        pass
+
+    def __call__(self):
+        fields = self.request.form
+        proPk = fields.get('proPk')
+        coordX = int(fields.get('x'))
+        if coordX < 0:
+            coordX = 0
+        coordY = int(fields.get('y'))
+        if coordY < 0:
+            coordY = 0
+        width = int(float(fields.get('w')))
+        height = int(float(fields.get('h')))
+        scale = fields.get('scale', '')
+
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        tmpStorage = getattr(portal, 'photos_proprio_tmp')
+        origin = '%s/%s.jpg' % (tmpStorage.basepath, proPk)
+        photoStorage = getattr(portal, 'photos_proprio')
+        destination = '%s/%s.jpg' % (photoStorage.basepath, proPk)
+        img = Image.open(origin)
+
+        if scale:
+            imgWidth, imgHeight = img.size
+            scaling = imgWidth / float(1000)
+            coordX = float(coordX) * scaling
+            coordY = float(coordY) * scaling
+            width = float(width) * scaling
+            height = float(height) * scaling
+        box = (int(coordX), int(coordY),
+               int(coordX + width), int(coordY + height))
+        img = img.crop(box)
+        img.save(destination, "JPEG")
+        img = Image.open(destination)
+        img = img.resize((196, 170), Image.ANTIALIAS)
+        img.save(destination, "JPEG")
+        os.unlink(origin)
+        portalUrl = getToolByName(self.context, 'portal_url')()
+        self.request.response.redirect("%s/zone-membre/proprio-info" % portalUrl)
+        return ''

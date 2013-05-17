@@ -47,20 +47,43 @@ jQuery(document).ready(function($) {
                                                                    'message': data.result.message});
             }
         },
-        progressall: function (e, data) {
-            $("#error-message").hide();
-            $("#progress").show();
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            var percentVal = progress + '%';
-            $('#progress .bar').css(
-                'width',
-                progress + '%'
-            );
-            $('#progress .bar').html(percentVal);
-        }
+        progressall: showProgress
+    });
+
+    $('#fileupload-proprio').fileupload({
+        url: 'upload-image-proprio',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == -1)
+            {
+                $("#error-message").text(data.result.message);
+                $("#error-message").show();
+            }
+            else {
+                $("#proprio-photo-edition-fieldset").load("crop-image-proprio", {'proPk': data.result.proPk,
+                                                                                 'originalFile': data.result.filename,
+                                                                                 'status': data.result.status,
+                                                                                 'width': data.result.width,
+                                                                                 'message': data.result.message});
+            }
+        },
+        progressall: showProgress
     });
 
 });
+
+
+function showProgress(e, data) {
+    $("#error-message").hide();
+    $("#progress").show();
+    var progress = parseInt(data.loaded / data.total * 100, 10);
+    var percentVal = progress + '%';
+    $('#progress .bar').css(
+        'width',
+        progress + '%'
+    );
+    $('#progress .bar').html(percentVal);
+};
 
 function checkCoords() {
     if (parseInt($('#w').val(), 10) > 0) return true;

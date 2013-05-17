@@ -9,10 +9,10 @@
   jQuery(function($){
 
     $('#image-to-crop').Jcrop({
-        aspectRatio: 1/0.65,
+        aspectRatio: 196/170,
         onSelect: updateCoords,
         onChange: updateCoords,
-        setSelect: [0, 0, 580, 377]
+        setSelect: [0, 0, 196, 170]
     });
 
     function updateCoords(c)
@@ -25,32 +25,27 @@
   });
 </script>
 
-<div tal:define="hebPk request/hebPk;
-                 width request/width;
-                 heb python:view.getHebergementByHebPk(hebPk)">
-
-    <div tal:condition="not: heb">
-        <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
-    </div>
+<div tal:define="proPk request/proPk;
+                 width request/width">
 
     <div>
        <p>
             Vous devez couper l'image pour qu'elle ait les dimensions nécessaires.
        </p>
 
-       <form onsubmit="return checkCoords();" method="post" action="save-image">
+       <form onsubmit="return checkCoords();" method="post" action="save-image-proprio">
 
 
            <tal:if condition="python: int(width) > 1000">
                <img src="" id="image-to-crop"
                     width="1000"
-                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg" />
+                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio_tmp/${proPk}.jpg" />
                <input type="hidden" name="scale" value="1000">
            </tal:if>
 
            <tal:if condition="python: int(width) <= 1000">
                <img src="" id="image-to-crop"
-                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg" />
+                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio_tmp/${proPk}.jpg" />
                <input type="hidden" name="scale" value="">
            </tal:if>
 
@@ -59,8 +54,8 @@
            <input id="w" type="hidden" name="w" value="">
            <input id="h" type="hidden" name="h" value="">
 
-           <input type="hidden" name="hebPk" value=""
-                  tal:attributes="value heb/heb_pk">
+           <input type="hidden" name="proPk" value=""
+                  tal:attributes="value proPk">
 
            <br />
 
