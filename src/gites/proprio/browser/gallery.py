@@ -52,7 +52,10 @@ class GalleryMixin(object):
         vignettes = []
         hebergement = self.getHebergementByHebPk(hebPk)
         codeGDW = hebergement.heb_code_gdw
-        listeImage = self.context.photos_heb.fileIds()
+        utool = getToolByName(self.context, 'portal_url')
+        portal = utool.getPortalObject()
+        photoStorage = getattr(portal, 'photos_heb')
+        listeImage = photoStorage.fileIds()
         for i in range(40):
             photo = "%s%02d.jpg" % (codeGDW, i)
             if photo in listeImage:
