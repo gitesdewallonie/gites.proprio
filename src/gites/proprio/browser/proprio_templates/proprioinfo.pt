@@ -12,7 +12,7 @@
 </head>
 <body>
 <div metal:fill-slot="main"
-     tal:define="proprios python:view.getProprioByLogin()">
+     tal:define="proprio python:view.getProprioByLogin()">
     <h1>Modification de vos informations</h1>
     <p> 
       Ce formulaire vous permet de modifier vos informations personnelles.
@@ -33,7 +33,7 @@
     </p>
     <hr />
 
-    <div tal:repeat="proprio proprios" align="center">
+    <div align="center">
         <form name="formulaire_creation"
               action="maj-info_proprio-insertion"
               method="post">

@@ -22,6 +22,7 @@ from plone.memoize import forever
 from affinitic.pwmanager.interfaces import IPasswordManager
 
 from gites.proprio import interfaces
+from gites.proprio.browser.common import ZoneMembreMixin
 
 
 @forever.memoize
@@ -36,7 +37,7 @@ def getInformationsForVideo(videoUrl):
             'thumb': embed.thumbnail_url}
 
 
-class HebergementMixin(object):
+class GalleryMixin(object):
 
     def getHebergementPksByProprietaire(self, proprioPk):
         wrapper = getSAWrapper('gites_wallons')
@@ -46,30 +47,6 @@ class HebergementMixin(object):
         query = query.filter(hebergementTable.heb_pro_fk == proprioPk)
         hebergements = query.all()
         return [heb.heb_pk for heb in hebergements]
-
-    def getProprioByLogin(self):
-        pm = getToolByName(self, 'portal_membership')
-        user = pm.getAuthenticatedMember()
-        proprioLogin = user.getUserName()
-        wrapper = getSAWrapper('gites_wallons')
-        session = wrapper.session
-        proprioTable = wrapper.getMapper('proprio')
-        query = session.query(proprioTable)
-        query = query.filter(proprioTable.pro_log == proprioLogin)
-        proprio = query.first()
-        return proprio
-
-    def getHebergementByHebPk(self, hebPk):
-        proprio = self.getProprioByLogin()
-        hebPk = int(hebPk)
-        wrapper = getSAWrapper('gites_wallons')
-        session = wrapper.session
-        hebergementTable = wrapper.getMapper('hebergement')
-        query = session.query(hebergementTable)
-        query = query.filter(hebergementTable.heb_pk == hebPk)
-        query = query.filter(hebergementTable.heb_pro_fk == proprio.pro_pk)
-        hebergement = query.first()
-        return hebergement
 
     def getVignettes(self, hebPk):
         vignettes = []
@@ -112,7 +89,7 @@ class HebergementMixin(object):
         img.save(destination, "JPEG")
 
 
-class GalleryInfo(grok.View, HebergementMixin):
+class GalleryInfo(grok.View, GalleryMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'gallery-info')
     grok.require('zope2.Public')
@@ -211,7 +188,7 @@ class GalleryInfo(grok.View, HebergementMixin):
         return {'status': 1}
 
 
-class GalleryUpload(grok.View, HebergementMixin):
+class GalleryUpload(grok.View, GalleryMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'upload-image')
     grok.require('zope2.Public')
@@ -258,14 +235,14 @@ class GalleryUpload(grok.View, HebergementMixin):
                                  'status': 1})
 
 
-class GalleryCrop(grok.View, HebergementMixin):
+class GalleryCrop(grok.View, GalleryMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'crop-image')
     grok.require('zope2.Public')
     grok.implements(interfaces.IGalleryInfo)
 
 
-class GallerySave(grok.View, HebergementMixin):
+class GallerySave(grok.View, GalleryMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'save-image')
     grok.require('zope2.Public')

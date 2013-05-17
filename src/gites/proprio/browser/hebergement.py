@@ -11,73 +11,15 @@ import zope.interface
 from five import grok
 from sqlalchemy import and_
 from z3c.sqlalchemy import getSAWrapper
-from Products.CMFCore.utils import getToolByName
 
 from gites.core.mailer import Mailer
 from gites.db import content as mappers, session as Session
 
 from gites.proprio import interfaces
+from gites.proprio.browser.common import ZoneMembreMixin
 
 
 class HebergementMixin(object):
-
-    def getHebergementByProprietaire(self, proprioFk):
-        """
-        Sélectionne les infos de l'hébergement d'un proprio selon sa clé
-        """
-        wrapper = getSAWrapper('gites_wallons')
-        session = wrapper.session
-        hebergementTable = wrapper.getMapper('hebergement')
-        query = session.query(hebergementTable)
-        query = query.filter(hebergementTable.heb_pro_fk == proprioFk)
-        hebergement = query.all()
-        return hebergement
-
-    def getProprioByLogin(self):
-        """
-        Sélectionne les infos d'un proprio selon son login
-        """
-        pm = getToolByName(self, 'portal_membership')
-        user = pm.getAuthenticatedMember()
-        proprioLogin = user.getUserName()
-        wrapper = getSAWrapper('gites_wallons')
-        session = wrapper.session
-        proprioTable = wrapper.getMapper('proprio')
-        query = session.query(proprioTable)
-        query = query.filter(proprioTable.pro_log == proprioLogin)
-        proprio = query.first()
-        return proprio
-
-    def getHebergementByHebPk(self, hebPk):
-        """ Sélectionne les infos d'un proprio selon son login """
-        proprio = self.getProprioByLogin()
-        hebPk = int(hebPk)
-        wrapper = getSAWrapper('gites_wallons')
-        session = wrapper.session
-        hebergementTable = wrapper.getMapper('hebergement')
-        query = session.query(hebergementTable)
-        query = query.filter(hebergementTable.heb_pk == hebPk)
-        query = query.filter(hebergementTable.heb_pro_fk == proprio.pro_pk)
-        hebergement = query.all()
-        return hebergement
-
-    def getHebergementMajByhebPk(self, hebPk):
-        """
-        Retourne si des infos de maj existe déjà pour un hebergement
-        selon sa clé depuis la table hebergement_maj
-        """
-        hebergementMajExist = False
-        wrapper = getSAWrapper('gites_wallons')
-        session = wrapper.session
-        hebergementMajTable = wrapper.getMapper('hebergement_maj')
-        query = session.query(hebergementMajTable)
-        query = query.filter(hebergementMajTable.heb_maj_hebpk == hebPk)
-        records = query.all()
-        if len(records) > 0:
-            hebergementMajExist = True
-        else:
-            hebergementMajExist = False
-        return hebergementMajExist
 
     def getTableHote(self):
         """ Sélectionne toutes les table d'hôte """
@@ -201,8 +143,7 @@ class HebergementMixin(object):
         hebNom = fields.get('heb_maj_nom')
 
         hebergement = self.getHebergementByHebPk(hebPk)
-        for elem in hebergement:
-            hebergementPk = elem.heb_pk
+        hebergementPk = hebergement.heb_pk
 
         if int(hebPk) == hebergementPk:
             # Verifies if there's updates awaiting of validation
@@ -287,7 +228,7 @@ class HebergementMixin(object):
         return query.all()
 
 
-class HebergementInfo(grok.View, HebergementMixin):
+class HebergementInfo(grok.View, HebergementMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'hebergement-info')
     grok.require('zope2.Public')
@@ -297,7 +238,7 @@ class HebergementInfo(grok.View, HebergementMixin):
         self.insert_missing_metadata(self.request.get('hebPk'))
 
 
-class HebergementUpdate(grok.View, HebergementMixin):
+class HebergementUpdate(grok.View, HebergementMixin, ZoneMembreMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'maj-hebergement-insertion')
     grok.require('zope2.Public')

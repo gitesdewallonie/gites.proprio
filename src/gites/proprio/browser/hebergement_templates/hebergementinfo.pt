@@ -6,13 +6,13 @@
 <body>
 <div metal:fill-slot="main"
      tal:define="hebPk request/hebPk;
-                 hebergements python:view.getHebergementByHebPk(hebPk);
+                 heb python:view.getHebergementByHebPk(hebPk);
                  tableHote python:view.getTableHote();
                  typeTables python:view.getTypeTableHoteByHebPk(hebPk);">
-    <div tal:condition="python: hebergements == []">
+    <div tal:condition="not: heb">
         <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
     </div>
-    <div tal:repeat="heb hebergements">
+    <div>
 
        <h1>Modification des informations de votre hébergement <span tal:content="heb/heb_nom" /></h1>
        <p>
