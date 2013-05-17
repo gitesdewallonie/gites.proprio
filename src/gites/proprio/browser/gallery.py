@@ -280,7 +280,7 @@ class GallerySave(grok.View, GalleryMixin, ZoneMembreMixin):
 
         if scale:
             imgWidth, imgHeight = img.size
-            scaling = float(1000) / imgWidth
+            scaling = imgWidth / float(1000)
             coordX = float(coordX) * scaling
             coordY = float(coordY) * scaling
             width = float(width) * scaling
