@@ -239,6 +239,8 @@ class ProprioPhotoUpload(grok.View, ZoneMembreMixin):
         destination = '%s/%s.jpg' % (tmpStorage.basepath, proPk)
         ImageFile.MAXBLOCK = width * height
         img.save(destination, "JPEG")
+        imageUrlToPurge = '%s/%s.jpg' % (tmpStorage.absolute_url(), proPk)
+        self.purgeCacheForImages([imageUrlToPurge])
         self.request.response.setHeader('content-type', 'text/x-json')
         self.request.response.setHeader('Cache-Control', 'no-cache')
         return simplejson.dumps({'proPk': proPk,
@@ -300,6 +302,8 @@ class ProprioPhotoSave(grok.View, ZoneMembreMixin):
         img = img.resize((196, 170), Image.ANTIALIAS)
         img.save(destination, "JPEG")
         os.unlink(origin)
+        imageUrlToPurge = '%s/%s.jpg' % (photoStorage.absolute_url(), proPk)
+        self.purgeCacheForImages([imageUrlToPurge])
         portalUrl = getToolByName(self.context, 'portal_url')()
         self.request.response.redirect("%s/zone-membre/proprio-info" % portalUrl)
         return ''

@@ -6,7 +6,8 @@ Created by mpeeters
 Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
-
+from httplib import HTTPConnection
+from urlparse import urlparse
 from z3c.sqlalchemy import getSAWrapper
 from Products.CMFCore.utils import getToolByName
 
@@ -39,3 +40,14 @@ class ZoneMembreMixin(object):
         query = query.filter(proprioTable.pro_log == proprioLogin)
         proprio = query.first()
         return proprio
+
+    def purgeCacheForImages(self, imagesUrls):
+        if not imagesUrls:
+            return
+        baseUrl = urlparse(imagesUrls[0])
+        connection = HTTPConnection(baseUrl.hostname, baseUrl.port or 80)
+        for url in imagesUrls:
+            url = urlparse(url)
+            connection.request('PURGE', url.path, '', {'Host': url.hostname})
+            connection.getresponse().read()
+        connection.close()

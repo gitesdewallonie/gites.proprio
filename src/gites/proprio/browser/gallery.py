@@ -37,7 +37,7 @@ def getInformationsForVideo(videoUrl):
             'thumb': embed.thumbnail_url}
 
 
-class GalleryMixin(object):
+class GalleryMixin(ZoneMembreMixin):
 
     def getHebergementPksByProprietaire(self, proprioPk):
         wrapper = getSAWrapper('gites_wallons')
@@ -69,13 +69,17 @@ class GalleryMixin(object):
         photoStorage = getattr(portal, 'photos_heb')
         dirPath = photoStorage.basepath
         index = 0
+        imageUrlsToPurge = []
         for vignette in existingVignettes:
             existingVignetteNumber = vignette[-6:-4]
             if int(existingVignetteNumber) != index:
                 newName = "%s%02d.jpg" % (vignette[:-6], index)
                 os.rename(os.path.join(dirPath, vignette),
                           os.path.join(dirPath, newName))
+                imageUrlsToPurge.append('%s/%s' % (photoStorage.absolute_url(),
+                                                   newName))
             index += 1
+        self.purgeCacheForImages(imageUrlsToPurge)
 
     def createVignette(self, hebPk):
         utool = getToolByName(self.context, 'portal_url')
@@ -90,9 +94,12 @@ class GalleryMixin(object):
         img = Image.open(origin)
         img = img.resize((60, 39), Image.ANTIALIAS)
         img.save(destination, "JPEG")
+        imageUrlToPurge = '%s/%s' % (vignetteStorage.absolute_url(),
+                                     firstPhoto)
+        self.purgeCacheForImages([imageUrlToPurge])
 
 
-class GalleryInfo(grok.View, GalleryMixin, ZoneMembreMixin):
+class GalleryInfo(grok.View, GalleryMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'gallery-info')
     grok.require('zope2.Public')
@@ -123,12 +130,16 @@ class GalleryInfo(grok.View, GalleryMixin, ZoneMembreMixin):
                 else:
                     os.rename(os.path.join(dirPath, photo),
                               os.path.join(dirPath, "%s_rn" % photo))
+        imageUrlsToPurge = []
         index = 0
         for image in imagesOrder:
             newName = "%s%02d.jpg" % (codeGDW, index)
             os.rename(os.path.join(dirPath, "%s_rn" % image),
                       os.path.join(dirPath, newName))
+            imageUrlsToPurge.append('%s/%s' % (photoStorage.absolute_url(),
+                                               newName))
             index += 1
+        self.purgeCacheForImages(imageUrlsToPurge)
         return super(GalleryInfo, self).__call__()
 
     def getHebergementVideo(self, hebPk):
@@ -191,7 +202,7 @@ class GalleryInfo(grok.View, GalleryMixin, ZoneMembreMixin):
         return {'status': 1}
 
 
-class GalleryUpload(grok.View, GalleryMixin, ZoneMembreMixin):
+class GalleryUpload(grok.View, GalleryMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'upload-image')
     grok.require('zope2.Public')
@@ -229,6 +240,8 @@ class GalleryUpload(grok.View, GalleryMixin, ZoneMembreMixin):
         destination = '%s/%s.jpg' % (tmpStorage.basepath, hebPk)
         ImageFile.MAXBLOCK = width * height
         img.save(destination, "JPEG")
+        imageUrlToPurge = '%s/%s.jpg' % (tmpStorage.absolute_url(), hebPk)
+        self.purgeCacheForImages([imageUrlToPurge])
         self.request.response.setHeader('content-type', 'text/x-json')
         self.request.response.setHeader('Cache-Control', 'no-cache')
         return simplejson.dumps({'hebPk': hebPk,
@@ -238,14 +251,14 @@ class GalleryUpload(grok.View, GalleryMixin, ZoneMembreMixin):
                                  'status': 1})
 
 
-class GalleryCrop(grok.View, GalleryMixin, ZoneMembreMixin):
+class GalleryCrop(grok.View, GalleryMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'crop-image')
     grok.require('zope2.Public')
     grok.implements(interfaces.IGalleryInfo)
 
 
-class GallerySave(grok.View, GalleryMixin, ZoneMembreMixin):
+class GallerySave(grok.View, GalleryMixin):
     grok.context(zope.interface.Interface)
     grok.name(u'save-image')
     grok.require('zope2.Public')
@@ -292,6 +305,9 @@ class GallerySave(grok.View, GalleryMixin, ZoneMembreMixin):
         img = Image.open(destination)
         img = img.resize((580, 377), Image.ANTIALIAS)
         img.save(destination, "JPEG")
+        imageUrlToPurge = '%s/%s39.jpg' % (photoStorage.absolute_url(),
+                                           codeGDW)
+        self.purgeCacheForImages([imageUrlToPurge])
         os.unlink(origin)
         self.compactVignettes(hebPk)
         self.createVignette(hebPk)
