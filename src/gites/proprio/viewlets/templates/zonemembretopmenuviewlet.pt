@@ -36,3 +36,39 @@
         </a>
     </div>
 </div>
+<div id="maj-info"
+     tal:condition='viewlet/isVisible'
+     tal:define="portal_url context/@@plone_portal_state/portal_url">
+    <h2>Mise à jour des infos</h2>
+    <div id="titre-mes-donnees">
+        Mes données
+    </div>
+    <div id="maj-info-menu">
+        <a href=""
+           tal:attributes="href string:${portal_url}/zone-membre/proprio-info">
+           <b>Mes données personnelles</b>
+        </a>
+    </div>
+    <div id="titre-hebergement">
+        Hébergement
+    </div>
+    <div id="maj-info-menu"
+         tal:repeat="gite viewlet/getGitesForProprio">
+        <a href=""
+           tal:attributes="href string:${portal_url}/zone-membre/hebergement-info?hebPk=${gite/token};
+                           title gite/title">
+           <b tal:replace="gite/title"/>
+        </a>
+    </div>
+    <div id="titre-hebergement">
+        Galerie de photos
+    </div>
+    <div id="maj-info-menu"
+         tal:repeat="gite viewlet/getGitesForProprio">
+        <a href=""
+           tal:attributes="href string:${portal_url}/zone-membre/gallery-info?hebPk=${gite/token};
+                           title gite/title">
+           <b tal:replace="gite/title"/>
+        </a>
+    </div>
+</div>
