@@ -119,6 +119,14 @@
 
                        <input type="submit"
                               value="Sauvegarder la galerie" />
+
+                        &nbsp;
+
+                       <input type="button"
+                              value="Annuler"
+                              onclick=""
+                              tal:attributes="onclick string:javascript:window.location.href='gallery-info?hebPk=${heb/heb_pk}'" />
+
                    </tal:if>
 
                 </form>
