@@ -20,7 +20,47 @@
 
 <body>
 <div metal:fill-slot="main"
-     tal:define="proprios python:view.getProprioByLogin()">
+     tal:define="proprio view/getProprioByLogin">
+
+    <fieldset id="proprio-photo-edition-fieldset" class="bordered">
+        <legend>Edition de la photo de contact (photo du propriétaire)</legend>
+
+        <div id="photoproprio-edition-fieldset">
+            <i>La photo que vous choisissez sera visible dans l'onglet contact du descriptif de vos hébergements.</i><br /><br />
+            <form action="proprio-info"
+                  method="post"
+                  id="proprio-form"
+                  tal:define="proPk proprio/pro_pk;
+                              photocontact python: view.getPhotoContact(proPk)">
+
+                <div id="description-photo-proprio">
+                    <img src="" width="196" height="170"
+                         tal:condition="photocontact"
+                         tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg" />
+                </div>
+
+                <br />
+
+                <label for="file">Modifier votre photo : </label>
+                <input id="fileupload-proprio" type="file" name="file" size="30"
+                       accept="image/gif, image/jpeg, image/png">
+
+                <br /><br />
+
+                <div id="progress"  style="display:none">
+                    <div class="bar"></div>
+                </div>
+                <br />
+
+                <input type="hidden"
+                       name="proPk"
+                       value=""
+                       tal:attributes="value proPk" />
+
+             </form>
+        </div>
+    </fieldset>
+
     <div id="formulaire-donnee-proprio"> 
         <h1>Modification de vos informations</h1>
         <p> 
@@ -42,7 +82,7 @@
         </p>
         <hr />
 
-        <div tal:repeat="proprio proprios" align="center">
+        <div align="center">
             <form name="formulaire_creation"
                   action="maj-info_proprio-insertion"
                   method="post">
@@ -181,7 +221,7 @@
                        value="Modifier mes données" />
             </form>
             <br />
-        </div><!--repeat-->
+        </div>
     </div><!--formulaire-donnee-proprio-->
 </div>
 </body>
