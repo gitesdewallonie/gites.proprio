@@ -1,6 +1,6 @@
 <div id="zone-membre"
      tal:condition='viewletmanager/available'>
-    <h2>Zone Membre</h2>
+    <h2>Bienvenue sur la Zone Membre de notre site</h2>
     <tal:viewlets repeat="viewlet viewletmanager/viewlets">
         <tal:viewlet tal:replace="structure python:viewlet.render()" />
     </tal:viewlets>

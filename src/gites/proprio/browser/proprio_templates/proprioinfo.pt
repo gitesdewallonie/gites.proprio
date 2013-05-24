@@ -22,47 +22,8 @@
 <div metal:fill-slot="main"
      tal:define="proprio view/getProprioByLogin">
 
-    <fieldset id="proprio-photo-edition-fieldset" class="bordered">
-        <legend>Edition de la photo de contact (photo du propriétaire)</legend>
-
-        <div id="photoproprio-edition-fieldset">
-            <i>La photo que vous choisissez sera visible dans l'onglet contact du descriptif de vos hébergements.</i><br /><br />
-            <form action="proprio-info"
-                  method="post"
-                  id="proprio-form"
-                  tal:define="proPk proprio/pro_pk;
-                              photocontact python: view.getPhotoContact(proPk)">
-
-                <div id="description-photo-proprio">
-                    <img src="" width="196" height="170"
-                         tal:condition="photocontact"
-                         tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg" />
-                </div>
-
-                <br />
-
-                <label for="file">Modifier votre photo : </label>
-                <input id="fileupload-proprio" type="file" name="file" size="30"
-                       accept="image/gif, image/jpeg, image/png">
-
-                <br /><br />
-
-                <div id="progress"  style="display:none">
-                    <div class="bar"></div>
-                </div>
-                <br />
-
-                <input type="hidden"
-                       name="proPk"
-                       value=""
-                       tal:attributes="value proPk" />
-
-             </form>
-        </div>
-    </fieldset>
-
-    <div id="formulaire-donnee-proprio"> 
-        <h1>Modification de vos informations</h1>
+    <div id="zone-proprio-formulaire">
+        <h2>Modifier vos données</h2>
         <p> 
           Ce formulaire vous permet de modifier vos informations personnelles.
         </p>
@@ -80,136 +41,135 @@
           transmis aux Gîtes de Wallonie qui vérifieront et valideront
           vos données. Dès que celles-ci seront validées, elles apparaitront sur le site.
         </p>
-        <hr />
 
-        <div align="center">
-            <form name="formulaire_creation"
-                  action="maj-info_proprio-insertion"
-                  method="post">
-                 
-                <label for="pro_pk">PK Proprio</label>
-                <span tal:content="proprio/pro_pk"
-                      id="pro_pk"
-                      class="maj-donnee" />
-                
-                <label for="pro_maj_civ_fk">Civilité</label>
-                <select name="pro_maj_civ_fk"
-                        id="pro_maj_civ_fk"
-                        tal:define="civilites python:view.getAllCivilites()">
-                    <tal:boucle tal:repeat="civilite civilites">
+        <form name="formulaire_creation"
+              action="maj-info_proprio-insertion"
+              method="post">
+         
+            <label for="pro_pk">PK Proprio</label>
+            <span tal:content="proprio/pro_pk"
+                  id="pro_pk"
+                  class="maj-donnee" />
+        
+            <label for="pro_maj_civ_fk">Civilité</label>
+            <select name="pro_maj_civ_fk"
+                    id="pro_maj_civ_fk"
+                    tal:define="civilites python:view.getAllCivilites()">
+                <tal:boucle tal:repeat="civilite civilites">
+                    <option value=""
+                            selected=""
+                            tal:attributes="value civilite/civ_pk;
+                                            selected python:proprio.pro_civ_fk == civilite.civ_pk or None">
+                        <span tal:content="civilite/civ_titre" />
+                    </option>
+                </tal:boucle>
+            </select>
+        
+            <label for="pro_maj_nom1">Nom 1</label>
+            <input type="text"
+                   name="pro_maj_nom1"
+                   id="pro_maj_nom1"
+                   size="50"
+                   value=""
+                   tal:attributes="value proprio/pro_nom1" />
+        
+            <label for="">Prénom</label>
+            <input type="text"
+                   name="pro_maj_prenom1"
+                   size="50"
+                   value=""
+                   tal:attributes="value proprio/pro_prenom1" />
+            
+            <label for="">Nom 2</label>
+            <input type="text"
+                   name="pro_maj_nom2"
+                   value=""
+                   size="50"
+                   tal:attributes="value proprio/pro_nom2" />
+        
+            <label for="">Prénom 2</label>
+            <input type="text"
+                   name="pro_maj_prenom2"
+                   value=""
+                   size="50"
+                   tal:attributes="value proprio/pro_prenom2" />
+        
+            <label for="">Société</label>
+            <input type="text"
+                   name="pro_maj_societe"
+                   value=""
+                   size="50"
+                   tal:attributes="value proprio/pro_societe" />
+        
+            <label for="">Adresse</label>
+            <input type="text"
+                   name="pro_maj_adresse"
+                   value=""
+                   size="50"
+                   tal:attributes="value proprio/pro_adresse" />
+        
+            <label for="">Code postal - Localité</label>
+            <div>
+                <select name="pro_maj_com_fk"
+                        tal:define="communes python:view.getAllCommunes()">
+                    <span tal:repeat="commune communes">
                         <option value=""
-                                selected=""
-                                tal:attributes="value civilite/civ_pk;
-                                                selected python:proprio.pro_civ_fk == civilite.civ_pk or None">
-                            <span tal:content="civilite/civ_titre" />
+                                tal:attributes="value commune/com_pk;
+                                                selected python:proprio.pro_com_fk == commune.com_pk or None">
+                            <span tal:content="commune/com_cp" /> -
+                            <span tal:content="commune/com_nom" />
                         </option>
-                    </tal:boucle>
+                    </span>
                 </select>
-                
-                <label for="pro_maj_nom1">Nom 1</label>
-                <input type="text"
-                       name="pro_maj_nom1"
-                       id="pro_maj_nom1"
-                       size="50"
-                       value=""
-                       tal:attributes="value proprio/pro_nom1" />
-                
-                <label for="">Prénom</label>
-                <input type="text"
-                       name="pro_maj_prenom1"
-                       size="50"
-                       value=""
-                       tal:attributes="value proprio/pro_prenom1" />
-                    
-                <label for="">Nom 2</label>
-                <input type="text"
-                       name="pro_maj_nom2"
-                       value=""
-                       size="50"
-                       tal:attributes="value proprio/pro_nom2" />
-                
-                <label for="">Prénom 2</label>
-                <input type="text"
-                       name="pro_maj_prenom2"
-                       value=""
-                       size="50"
-                       tal:attributes="value proprio/pro_prenom2" />
-                
-                <label for="">Société</label>
-                <input type="text"
-                       name="pro_maj_societe"
-                       value=""
-                       size="50"
-                       tal:attributes="value proprio/pro_societe" />
-                
-                <label for="">Adresse</label>
-                <input type="text"
-                       name="pro_maj_adresse"
-                       value=""
-                       size="50"
-                       tal:attributes="value proprio/pro_adresse" />
-                
-                <label for="">Code postal - Localité</label>
-                <div>
-                    <select name="pro_maj_com_fk"
-                            tal:define="communes python:view.getAllCommunes()">
-                        <span tal:repeat="commune communes">
-                            <option value=""
-                                    tal:attributes="value commune/com_pk;
-                                                    selected python:proprio.pro_com_fk == commune.com_pk or None">
-                                <span tal:content="commune/com_cp" /> -
-                                <span tal:content="commune/com_nom" />
-                            </option>
-                        </span>
-                    </select>
-                </div>
-                
-                <label for="">E-mail</label>
-                <input type="text"
-                       name="pro_maj_email"
-                       value=""
-                       size="50"
-                       tal:attributes="value proprio/pro_email" />
-                
-                <label for="">Téléphone privé</label>
-                <input type="text"
-                       name="pro_maj_tel_priv"
-                       value=""
-                       tal:attributes="value proprio/pro_tel_priv" />
-                
-                <label for="">Fax privé</label>
-                <input type="text"
-                       name="pro_maj_fax_priv"
-                       value=""
-                       tal:attributes="value proprio/pro_fax_priv" />
-                
-                <label for="">GSM 1</label>
-                <input type="text"
-                       name="pro_maj_gsm1"
-                       value=""
-                       tal:attributes="value proprio/pro_gsm1" />
-                       <span tal:content="proprio/pro_gsm1" />
-                
-                <label for="">URL du site personnel</label>
-                <input type="text"
-                       name="pro_maj_url"
-                       value=""
-                       tal:attributes="value proprio/pro_url" />
-                       <span tal:content="proprio/pro_url" />
-                
-                <label for="">Numéro de TVA</label>
-                <input type="text"
-                       name="pro_maj_tva"
-                       value=""
-                       tal:attributes="value proprio/pro_tva" />
-                       <span tal:content="proprio/pro_tva" />
-                 
-                <label for="">Langues parlées</label>
-                <input type="text"
-                       name="pro_maj_langue"
-                       value=""
-                       tal:attributes="value proprio/pro_langue" />
+            </div>
+        
+            <label for="">E-mail</label>
+            <input type="text"
+                   name="pro_maj_email"
+                   value=""
+                   size="50"
+                   tal:attributes="value proprio/pro_email" />
+        
+            <label for="">Téléphone privé</label>
+            <input type="text"
+                   name="pro_maj_tel_priv"
+                   value=""
+                   tal:attributes="value proprio/pro_tel_priv" />
+        
+            <label for="">Fax privé</label>
+            <input type="text"
+                   name="pro_maj_fax_priv"
+                   value=""
+                   tal:attributes="value proprio/pro_fax_priv" />
+        
+            <label for="">GSM 1</label>
+            <input type="text"
+                   name="pro_maj_gsm1"
+                   value=""
+                   tal:attributes="value proprio/pro_gsm1" />
+                   <span tal:content="proprio/pro_gsm1" />
+        
+            <label for="">URL du site personnel</label>
+            <input type="text"
+                   name="pro_maj_url"
+                   value=""
+                   tal:attributes="value proprio/pro_url" />
+                   <span tal:content="proprio/pro_url" />
+        
+            <label for="">Numéro de TVA</label>
+            <input type="text"
+                   name="pro_maj_tva"
+                   value=""
+                   tal:attributes="value proprio/pro_tva" />
+                   <span tal:content="proprio/pro_tva" />
+         
+            <label for="">Langues parlées</label>
+            <input type="text"
+                   name="pro_maj_langue"
+                   value=""
+                   tal:attributes="value proprio/pro_langue" />
 
+            <div class="submit-form">
                 <input type="hidden"
                        name="pro_maj_propk"
                        value=""
@@ -219,10 +179,54 @@
                        value="En attente confirmation" />
                 <input type="submit"
                        value="Modifier mes données" />
-            </form>
-            <br />
-        </div>
-    </div><!--formulaire-donnee-proprio-->
+            </div>
+        </form>
+        <br />
+    </div><!--zone-proprio-formulaire-->
+    
+    <div id="proprio-photo-edition-fieldset">
+        <div id="photoproprio-edition-fieldset">
+            <h2>Modifier votre photo</h2>
+            <p>
+            La photo que vous choisissez sera visible 
+            dans l'onglet contact du descriptif de vos hébergements.
+            </p>
+            <form action="proprio-info"
+                  method="post"
+                  id="proprio-form"
+                  tal:define="proPk proprio/pro_pk;
+                              photocontact python: view.getPhotoContact(proPk)">
+
+                <div id="description-photo-proprio">
+                    <img src="" width="196" height="170"
+                         tal:condition="photocontact"
+                         tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg" />
+                </div>
+
+                <br />
+
+                <label for="fileupload-proprio">Modifier votre photo : </label>
+                <input id="fileupload-proprio"
+                       type="file"
+                       name="file"
+                       size="30"
+                       accept="image/gif, image/jpeg, image/png" />
+
+                <br /><br />
+
+                <div id="progress"  style="display:none">
+                    <div class="bar"></div>
+                </div>
+                <br />
+
+                <input type="hidden"
+                       name="proPk"
+                       value=""
+                       tal:attributes="value proPk" />
+
+             </form>
+        </div><!--photoproprio-edition-fieldset-->
+    </div><!--proprio-photo-edition-fieldset-->
 </div>
 </body>
 </html>
