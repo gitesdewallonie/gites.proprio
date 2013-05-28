@@ -22,6 +22,10 @@
 <div metal:fill-slot="main"
      tal:define="proprio view/getProprioByLogin">
 
+    <div id="error-message" class="error-center" style="display:none">
+        Error message filled by javascript
+    </div>
+
     <div id="zone-proprio-formulaire">
         <h2>Modifier vos données</h2>
         <p> 
