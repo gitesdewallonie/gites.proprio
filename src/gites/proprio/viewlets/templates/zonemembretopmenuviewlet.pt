@@ -1,74 +1,85 @@
-<div id="calendrier-zone-proprio"
+<div id="maj-info"
      tal:condition='viewlet/isVisible'
-     tal:define="portal_url context/@@plone_portal_state/portal_url;
-                 hasActive viewlet/hasActiveConfiguration;
-                 isBlocked viewlet/isBlocked">
-    <h2>Calendrier</h2>
-    <tal:boucle tal:condition="python: hasActive and not isBlocked"
-                tal:repeat="gite viewlet/getGitesForProprio">
+     tal:define="portal_url context/@@plone_portal_state/portal_url">
+    <h2>Mise à jour des infos personnelles</h2>
+    <div id="proprio-maj-info-menu">
         <a href=""
-           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/month.html?pk=${gite/token};
-                           title gite/title">
-        <b tal:replace="gite/title"/></a>
-    </tal:boucle>
-    <div tal:condition="python: hasActive and not isBlocked">
-        <a href=""
-           class="tile"
-           title="Affichage mensuel"
-           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/multical.html">
-           Affichage mensuel
+           tal:attributes="href string:${portal_url}/zone-membre/proprio-info">
+           Mes données personnelles
         </a>
     </div>
-    <div>
+    <div id="proprio-configuration-calendrier">
         <a href=""
            tal:condition="not: viewlet/isBlocked"
            tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/configuration">
-           Configuration
+           Configuration du calendrier
         </a>
         <span tal:condition="viewlet/isBlocked">
             Votre calendrier est bloqué. Veuillez contacter les Gîtes de Wallonie.
         </span>
     </div>
-    <div>
+    <div id="proprio-aide">
         <a href=""
            tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/aide">
            Aide
         </a>
     </div>
 </div>
-<div id="maj-info"
+
+
+<div id="calendrier-zone-proprio"
      tal:condition='viewlet/isVisible'
-     tal:define="portal_url context/@@plone_portal_state/portal_url">
-    <h2>Mise à jour des infos</h2>
-    <div id="titre-mes-donnees">
-        Mes données
-    </div>
-    <div id="maj-info-menu">
+     tal:define="portal_url context/@@plone_portal_state/portal_url;
+                 hasActive viewlet/hasActiveConfiguration;
+                 isBlocked viewlet/isBlocked">
+
+    <h2>Hébergement</h2>
+    <table id="proprio-table-hebergement">
+        <thead>
+            <th>Hébergement</th>
+            <th>Les données</th>
+            <th>Calendrier</th>
+            <th>Galerie photos</th>
+        </thead>
+        <tbody>
+            <tal:boucle tal:condition="python: hasActive and not isBlocked"
+                        tal:repeat="gite viewlet/getGitesForProprio">
+                <tr>
+                    <td>
+                        <b tal:replace="gite/title"/>
+                    </td>
+                    <td>
+                        <a href=""
+                           tal:attributes="href string:${portal_url}/zone-membre/hebergement-info?hebPk=${gite/token}">
+                           ici
+                         </a>
+                    </td>
+                    <td>
+                        <a href=""
+                           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/month.html?pk=${gite/token};">
+                           ici
+                        </a>
+                    </td>
+                    <td>    
+                        <a href=""
+                           tal:attributes="href string:${portal_url}/zone-membre/gallery-info?hebPk=${gite/token}">
+                           ici
+                        </a>
+                    </td>
+                </tr>
+            </tal:boucle>
+        </tbody>
+    </table>
+    <div id="prorpio-affichage-mensuel"
+         tal:condition="python: hasActive and not isBlocked">
         <a href=""
-           tal:attributes="href string:${portal_url}/zone-membre/proprio-info">
-           <b>Mes données personnelles</b>
+           class="tile"
+           title="Affichage mensuel"
+           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/multical.html">
+           Affichage mensuel du calendrier
         </a>
     </div>
-    <div id="titre-hebergement">
-        Hébergement
-    </div>
-    <div id="maj-info-menu"
-         tal:repeat="gite viewlet/getGitesForProprio">
-        <a href=""
-           tal:attributes="href string:${portal_url}/zone-membre/hebergement-info?hebPk=${gite/token};
-                           title gite/title">
-           <b tal:replace="gite/title"/>
-        </a>
-    </div>
-    <div id="titre-hebergement">
-        Galerie de photos
-    </div>
-    <div id="maj-info-menu"
-         tal:repeat="gite viewlet/getGitesForProprio">
-        <a href=""
-           tal:attributes="href string:${portal_url}/zone-membre/gallery-info?hebPk=${gite/token};
-                           title gite/title">
-           <b tal:replace="gite/title"/>
-        </a>
-    </div>
+    <div class="break-float"></div>
+    
+    
 </div>
