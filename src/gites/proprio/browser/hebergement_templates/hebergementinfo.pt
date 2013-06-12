@@ -9,12 +9,13 @@
                  heb python:view.getHebergementByHebPk(hebPk);
                  tableHote python:view.getTableHote();
                  typeTables python:view.getTypeTableHoteByHebPk(hebPk);">
-    <div tal:condition="not: heb">
+
+    <div  tal:condition="not: heb">
         <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
     </div>
-    <div>
 
-       <h1>Modification des informations de votre hébergement <span tal:content="heb/heb_nom" /></h1>
+    <div id="zone-proprio-info-hebergement">
+       <h2>Modification des informations de votre hébergement</h2> 
        <p>
        Ce formulaire vous permet de modifier les informations de votre hébergement.
        </p>
@@ -32,10 +33,11 @@
        aux Gîtes de Wallonie qui vérifieront et valideront vos données.
        Dès que celles-ci seront validées, elles apparaitront sur le site.
        </p>
-
+       
+       <h3><span tal:content="heb/heb_nom" /></h3>
        <form action="maj-hebergement-insertion"
              method="post">
-           <!---[DEBUT INFORMATION GENERALE]--->
+           <!-- [DEBUT INFORMATION GENERALE] -->
            <input type="hidden"
                   name="heb_maj_pk"
                   value=""
