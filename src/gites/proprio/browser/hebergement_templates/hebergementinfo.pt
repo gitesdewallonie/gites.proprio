@@ -143,14 +143,17 @@
                                              name metadata/pk" />
                       <input type="hidden" name="metadata_fk:list" value=""
                              tal:attributes="value metadata/pk" />
+                      &nbsp;
                       <img src=""
-                           title=""
-                           alt=""
+                           title="metadata/title"
+                           alt="metadata/title"
+                           width="24"
                            tal:attributes="src string:${metadata/id}.png;
                                            alt metadata/title;
                                            title metadata/title;"
-                           class="picto"/>
-                      <tal:block content="metadata/title" /><br />
+                           class="picto"/> 
+                      <tal:block content="metadata/title" />
+                      <br />
                     </tal:block>
                     <tal:block repeat="metadata python:view.get_editable_metadata('informations')">
                       <input type="checkbox" name="" checked="" value="1"
@@ -187,10 +190,10 @@
                 </td>
               </tr>
            </table>
-           <!---[FIN INFORMATION GENERALE]--->
+           <!-- [FIN INFORMATION GENERALE] -->
 
 
-           <!---[DEBUT TARIFICATION CHAMBRE]--->
+           <!-- [DEBUT TARIFICATION CHAMBRE] -->
            <table class="maj-info"
                   tal:condition="python: heb.type.type_heb_pk in (5,6,9)">
               <tr>
