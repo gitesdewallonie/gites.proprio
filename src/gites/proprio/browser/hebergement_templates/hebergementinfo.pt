@@ -43,15 +43,14 @@
                   value=""
                   tal:attributes="value heb/heb_pk" />
 
-           <table class="maj-info">
+           <table class="zone-proprio-maj-heb">
               <tr>
-                 <td align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
-                       INFORMATION GENERALE
+                 <td colspan="2"
+                     class="zone-proprio-maj-heb-titre">
+                    INFORMATION GENERALE
+                    <span class="align-right">
+                        Ref :: <b tal:content="heb/heb_pk" />
                     </span>
-                 </td>
-                 <td align="right" bgcolor="#ff862b">
-                    Ref :: <b tal:content="heb/heb_pk" />
                 </td>
               </tr>
               <tr>
@@ -194,13 +193,12 @@
 
 
            <!-- [DEBUT TARIFICATION CHAMBRE] -->
-           <table class="maj-info"
+           <table class="zone-proprio-maj-heb"
                   tal:condition="python: heb.type.type_heb_pk in (5,6,9)">
               <tr>
-                 <td colspan="4" align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
+                 <td colspan="4"
+                     class="zone-proprio-maj-heb-titre">
                     TARIFICATION DES CHAMBRES
-                    </span>
                  </td>
               </tr>
               <tr>
@@ -310,21 +308,20 @@
                  </td>
               </tr>
            </table>
-           <!---[FIN TARIFICATION CHAMBRE]--->
+           <!-- [FIN TARIFICATION CHAMBRE] -->
 
 
-           <!---[DEBUT TARIFICATION GITES]--->
-           <table class="maj-info"
+           <!-- [DEBUT TARIFICATION GITES] -->
+           <table class="zone-proprio-maj-heb"
                   tal:condition="python: heb.type.type_heb_pk not in (5,6,9)">
               <!--input type="hidden"
                      name="heb_maj_charge_fk"
                      value=""
                      tal:attributes="value heb/heb_charge_fk"-->
               <tr>
-                 <td colspan="2" align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
+                 <td colspan="4"
+                     class="zone-proprio-maj-heb-titre">
                     TARIFICATION DES GITES
-                    </span>
                  </td>
               </tr>
               <tr>
@@ -465,15 +462,14 @@
               </tr>
 
            </table>
-           <!---[FIN TARIFICATION GITES]--->
+           <!-- [FIN TARIFICATION GITES] -->
 
-           <!---[DEBUT TAXE SEJOUR]--->
-           <table class="maj-info">
+           <!-- [DEBUT TAXE SEJOUR] -->
+           <table class="zone-proprio-maj-heb">
               <tr>
-                 <td colspan="2" align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
+                 <td colspan="2"
+                     class="zone-proprio-maj-heb-titre">
                     TAXE DE SEJOUR
-                    </span>
                  </td>
               </tr>
               <tr bgcolor="#FDFFE0">
@@ -487,15 +483,13 @@
                  </td>
               </tr>
            </table>
-           <!---[FIN TAXE SEJOUR]--->
+           <!-- [FIN TAXE SEJOUR] -->
 
-           <!---[DEBUT POINTS FORTS HEB]--->
-           <table class="maj-info">
+           <!-- [DEBUT POINTS FORTS HEB] -->
+           <table class="zone-proprio-maj-heb">
               <tr>
-                 <td align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
-                    POINT FORT DE L' HEBERGEMENT
-                    </span>
+                 <td class="zone-proprio-maj-heb-titre">
+                     POINT FORT DE L' HEBERGEMENT
                  </td>
               </tr>
               <tr>
@@ -507,15 +501,13 @@
                  </td>
               </tr>
            </table>
-           <!---[FIN POINTS FORTS HEB]--->
+           <!-- [FIN POINTS FORTS HEB] -->
 
-           <!---[DEBUT DESCRIPTION HEB]--->
-           <table class="maj-info">
+           <!-- [DEBUT DESCRIPTION HEB] -->
+           <table class="zone-proprio-maj-heb">
               <tr>
-                 <td align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
+                 <td class="zone-proprio-maj-heb-titre">
                     DESCRIPTION HEBERGEMENT
-                    </span>
                  </td>
               </tr>
               <tr>
@@ -527,16 +519,13 @@
                  </td>
               </tr>
            </table>
-           <!---[FIN DESCRIPTION HEB]--->
+           <!-- [FIN DESCRIPTION HEB] -->
 
-           <!---[DEBUT DISTRIBUTION HEB]--->
-           <table class="maj-info">
+           <!-- [DEBUT DISTRIBUTION HEB] -->
+           <table class="zone-proprio-maj-heb">
               <tr>
-                 <td align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
+                 <td class="zone-proprio-maj-heb-titre">
                     DISTRIBUTION HEBERGEMENT
-                    </span>
-
                  </td>
               </tr>
               <tr>
@@ -548,16 +537,14 @@
                  </td>
               </tr>
            </table>
-           <!---[FIN DISTRIBUTION HEB]--->
+           <!-- [FIN DISTRIBUTION HEB] -->
 
-           <!---[DEBUT TYPE LIT HEB]--->
-           <table class="maj-info">
+           <!-- [DEBUT TYPE LIT HEB] -->
+           <table class="zone-proprio-maj-heb">
               <tr>
-                 <td colspan="2" align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
+                 <td colspan="2"
+                     class="zone-proprio-maj-heb-titre">
                     LITERIE
-                    </span>
-
                  </td>
               </tr>
               <tr>
@@ -599,16 +586,14 @@
                             tal:attributes="value heb/heb_lit_enf" /></td>
               </tr>
            </table>
-           <!---[FIN TYPE LIT HEB]--->
+           <!-- [FIN TYPE LIT HEB] -->
 
-           <!---[DEBUT CONFORT HEB]--->
-           <table class="maj-info">
+           <!-- [DEBUT CONFORT HEB] -->
+           <table class="zone-proprio-maj-heb">
               <tr>
-                 <td colspan="2" align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">
+                 <td colspan="2"
+                     class="zone-proprio-maj-heb-titre">
                     CONFORT DE L'HEBERGEMENT
-                    </span>
-
                  </td>
               </tr>
               <tr tal:repeat="metadata python:view.get_editable_metadata('confort')">
@@ -628,14 +613,15 @@
                 </td>
               </tr>
           </table>
-          <!---[FIN CONFORT HEB]--->
+          <!-- [FIN CONFORT HEB] -->
 
-          <!---[DEBUT CGT]--->
-          <table class="maj-info">
+          <!-- [DEBUT CGT] -->
+          <table class="zone-proprio-maj-heb">
              <tr>
-                <td colspan="2" align="left" bgcolor="#FF862B">
-                    <span class="titre_encodage">CGT</span>
-                </td>
+                 <td colspan="2"
+                     class="zone-proprio-maj-heb-titre">
+                    CGT
+                 </td>
              </tr>
              <tr>
                 <td class="maj-etiquette">Code CGT</td>
@@ -660,9 +646,9 @@
                 </td>
               </tr>
           </table>
-          <!---[FIN CGT]--->
+          <!-- [FIN CGT] -->
           <hr />
-          <table align="center">
+          <table class="zone-proprio-maj-heb">
             <tr>
               <td colspan="2" align="center">
                 <input type="hidden"
@@ -677,7 +663,7 @@
               </td>
             </tr>
           </table>
-          <!---[FIN CGT]--->
+          <!-- [FIN CGT] -->
         </form>
     </div>
 </div>
