@@ -27,12 +27,23 @@
         <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
     </div>
 
-    <div tal:define="result view/updateGallery;
+    <div id="proprio-photo-edition-fieldset"
+         tal:define="result view/updateGallery;
                      status result/status;
                      videoInfos python:view.getHebergementVideo(hebPk)">
-       <h1>Edition de la galerie photos & vidéo de votre hébergement <span tal:content="heb/heb_nom" /></h1>
+       <h2>Edition de la galerie photos & vidéo de votre hébergement</h2>
        <p>
-       Ce formulaire vous permet de modifier les photos et la vidéo de la galerie de votre hébergement.<br />
+       Ce formulaire vous permet de modifier les photos et la vidéo de 
+       la galerie de votre hébergement.
+       <p>
+       <p>
+       Si vous souhaitez obtenir des informations complémentaires ou si vous
+       éprouvez des difficultés à compléter ce formulaire, merci de prendre
+       contact avec nos bureaux au 081 311 800.
+       </p>
+       
+       <h3> <span tal:content="heb/heb_nom" /> </h3>
+       <p>
        Cette galerie publique est visible à l'adresse :
        <a href=""
           target="_blank"
@@ -40,12 +51,7 @@
           tal:attributes="href hebUrl"
           tal:content="hebUrl">Adresse de la fiche descriptive</a>
        </p>
-       <p>
-       Si vous souhaitez obtenir des informations complémentaires ou si vous
-       éprouvez des difficultés à compléter ce formulaire, merci de prendre
-       contact avec nos bureaux au 081 311 800.
-       </p>
-
+       
        <tal:if tal:condition="python: status is not None">
            <div class="info-center"
                 tal:condition="python: status == 1">
@@ -56,12 +62,13 @@
                 L'adresse de votre vidéo est inconnue ou n'est pas supportée.
            </div>
        </tal:if>
+
        <div id="error-message" class="error-center" style="display:none">
            Error message filled by javascript
        </div>
 
-       <fieldset class="bordered">
-           <legend>Edition des photos</legend>
+       <div id="zone-proprio-galerie">
+           <h4>Edition des photos</h4>
 
            <div id="gallery-edition-fieldset">
                <form action="gallery-info"
@@ -71,12 +78,16 @@
 
                    <tal:if tal:condition="python: len(vignettes) < 40">
                        <label for="file">Ajouter une photo : </label>
-                       <input id="fileupload" type="file" name="file" size="30"
+                       <input id="fileupload"
+                              type="file"
+                              name="file"
+                              size="30"
                               accept="image/gif, image/jpeg, image/png">
 
                        <br /><br />
 
-                       <div id="progress"  style="display:none">
+                       <div id="progress"
+                            style="display:none">
                            <div class="bar"></div>
                        </div>
                        <br />
@@ -93,7 +104,10 @@
                                     <div class="delete"></div>
                                     <div class="drag"></div>
                                 </div>
-                                <img src="" title="" alt="" height="150"
+                                <img src=""
+                                     title=""
+                                     alt=""
+                                     height="150"
                                      tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb/${vignette}" />
                            </div>
                        </tal:bcl>
@@ -111,30 +125,30 @@
                           value=""
                           tal:attributes="value python: '|'.join(vignettes)" />
 
-                   <tal:if tal:condition="vignettes">
-                       <br />
+                   <div class="submit-form">
+                       <tal:if tal:condition="vignettes">
+                           <p>
+                           <i><strong>Note</strong> : 
+                           la première photo sert de miniature pour votre hébergement
+                           dans les listing de recherches, etc.</i>
+                           </p>
+                           <input type="submit"
+                                  value="Sauvegarder la galerie" />
+                            &nbsp;
+                           <input type="button"
+                                  value="Annuler"
+                                  onclick=""
+                                  tal:attributes="onclick string:javascript:window.location.href='gallery-info?hebPk=${heb/heb_pk}'" />
 
-                       <i><strong>Note</strong> : la première photo sert de miniature pour votre hébergement dans les listing de recherches, etc.</i>
-                       <br /><br />
-
-                       <input type="submit"
-                              value="Sauvegarder la galerie" />
-
-                        &nbsp;
-
-                       <input type="button"
-                              value="Annuler"
-                              onclick=""
-                              tal:attributes="onclick string:javascript:window.location.href='gallery-info?hebPk=${heb/heb_pk}'" />
-
-                   </tal:if>
+                       </tal:if>
+                   </div>
 
                 </form>
            </div>
-       </fieldset>
+       </div>
 
-       <fieldset class="bordered">
-           <legend>Edition de la vidéo</legend>
+       <div id="zone-proprio-galerie">
+           <h4>Edition de la vidéo</h4>
 
            <form action="gallery-info"
                  method="post"
@@ -172,12 +186,9 @@
 
                <input type="submit"
                       value="Modifier la vidéo" />
-
             </form>
-       </fieldset>
-
+       </div>
     </div>
-
 </div>
 </body>
 </html>
