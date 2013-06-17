@@ -27,8 +27,7 @@
         <h1>Vous n'êtes pas propriétaire de cet hébergement...</h1>
     </div>
 
-    <div id="proprio-photo-edition-fieldset"
-         tal:define="result view/updateGallery;
+    <div tal:define="result view/updateGallery;
                      status result/status;
                      videoInfos python:view.getHebergementVideo(hebPk)">
        <h2>Edition de la galerie photos & vidéo de votre hébergement</h2>

@@ -117,7 +117,9 @@
                                               alt metadata/title;
                                               title metadata/title;"
                               class="picto"/>
-                         <tal:block content="metadata/title" /><br />
+                         <span tal:content="metadata/title" 
+                               class="discreet-info" />
+                         <br />
                        </tal:block>
                     </div>
                  </td>
@@ -150,8 +152,10 @@
                            tal:attributes="src string:${metadata/id}.png;
                                            alt metadata/title;
                                            title metadata/title;"
-                           class="picto"/> 
-                      <tal:block content="metadata/title" />
+                           class="picto"/>
+                      &nbsp; 
+                      <span tal:content="metadata/title"
+                            class="discreet-info" />
                       <br />
                     </tal:block>
                     <tal:block repeat="metadata python:view.get_editable_metadata('informations')">
@@ -167,7 +171,9 @@
                                            alt metadata/title;
                                            title metadata/title;"
                            class="picto"/>
-                      <tal:block content="metadata/title" /><br />
+                      <span content="metadata/title"
+                            class="discreet-info"></span>
+                      <br />
                     </tal:block>
                  </td>
               </tr>
@@ -603,13 +609,19 @@
                                          name metadata/pk" />
                   <input type="hidden" name="metadata_fk:list" value=""
                          tal:attributes="value metadata/pk" />
+                  &nbsp;
                   <img src=""
                        title=""
                        alt=""
+                       width="24"
                        tal:attributes="src string:${metadata/id}.png;
                                        alt metadata/title;
                                        title metadata/title;"
                        class="picto" />
+                  &nbsp;
+                  <span tal:content="metadata/title"
+                        class="discreet-info" />
+                  <br />
                 </td>
               </tr>
           </table>
