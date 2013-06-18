@@ -172,6 +172,7 @@
                          tal:define="videoDetails python: view.getInformationsForVideo(videoInfos.heb_vid_url)">
                        <h3><span tal:replace="videoDetails/title" /></h3>
                        <img src=""
+                            alt="Video détails"
                             tal:attributes="src videoDetails/thumb">
                    </div>
                </tal:if>
