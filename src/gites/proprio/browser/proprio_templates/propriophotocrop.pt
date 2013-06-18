@@ -38,6 +38,7 @@
 
            <tal:if condition="python: int(width) > 1000">
                <img src="" id="image-to-crop"
+                    alt="Image à découper"
                     width="1000"
                     tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio_tmp/${proPk}.jpg" />
                <input type="hidden" name="scale" value="1000">
@@ -45,6 +46,7 @@
 
            <tal:if condition="python: int(width) <= 1000">
                <img src="" id="image-to-crop"
+                    alt="Image à découper"
                     tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio_tmp/${proPk}.jpg" />
                <input type="hidden" name="scale" value="">
            </tal:if>
