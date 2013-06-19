@@ -70,7 +70,7 @@
             </tal:boucle>
         </tbody>
     </table>
-    <div id="prorpio-affichage-mensuel"
+    <div id="proprio-affichage-mensuel"
          tal:condition="showCalendar">
         <a href=""
            class="tile"
