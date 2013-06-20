@@ -160,14 +160,15 @@ class HebergementMixin(object):
             hebMajInfoEtat = "En attente confirmation"
             self.modifyStatutMajHebergement(hebPk, hebMajInfoEtat)
 
-            sujet = "Un proprio a modifie les infos de son hebergement"
-            message = """L'hébergement %s dont la référence est %s vient d'être modifié.
-                       Il faut vérifer ces données et les valider via le lien""" % (hebNom, hebPk)
+            sujet = u"Un proprio a modifie les infos de son hebergement"
+            message = u"""
+                L'hébergement %s dont la référence est %s vient d'être modifié.
+                Il faut vérifer ces données et les valider via le lien""" % (hebNom, hebPk)
             self.sendMail(sujet, message)
             return {'status': 1}
         else:
-            sujet = "Alerte :: Modification hebergement"
-            message = """L'hébergement %s dont la référence est %s n'a pas été modifié.
+            sujet = u"Alerte :: Modification hebergement"
+            message = u"""L'hébergement %s dont la référence est %s n'a pas été modifié.
                        Problème de PK""" % (hebNom, hebPk)
             self.sendMail(sujet, message)
             return {'status': -1}
