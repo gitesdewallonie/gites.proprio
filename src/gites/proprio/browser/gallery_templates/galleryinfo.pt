@@ -107,7 +107,7 @@
                                      title=""
                                      alt=""
                                      height="150"
-                                     tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb/${vignette}" />
+                                     tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb/${vignette}?${view/random}" />
                            </div>
                        </tal:bcl>
                        <div class="visualClear"></div>

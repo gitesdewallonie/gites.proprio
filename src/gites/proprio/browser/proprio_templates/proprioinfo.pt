@@ -205,7 +205,7 @@
                     <img src="" width="196" height="170"
                          alt="Photo proprio"
                          tal:condition="photocontact"
-                         tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg" />
+                         tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg?${view/random}" />
                 </div>
 
                 <br />

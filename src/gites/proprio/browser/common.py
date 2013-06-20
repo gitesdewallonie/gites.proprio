@@ -6,6 +6,8 @@ Created by mpeeters
 Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
+
+import random
 from httplib import HTTPConnection
 from urlparse import urlparse
 from z3c.sqlalchemy import getSAWrapper
@@ -13,6 +15,12 @@ from Products.CMFCore.utils import getToolByName
 
 
 class ZoneMembreMixin(object):
+
+    def random(self):
+        """
+        Generate random number to invalidate browser cache for images
+        """
+        return random.randrange(1, 1000000)
 
     def getHebergementByHebPk(self, hebPk):
         proprio = self.getProprioByLogin()
