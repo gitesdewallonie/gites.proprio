@@ -107,7 +107,7 @@
                                      title=""
                                      alt=""
                                      height="150"
-                                     tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb/${vignette}" />
+                                     tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb/${vignette}?${view/random}" />
                            </div>
                        </tal:bcl>
                        <div class="visualClear"></div>
@@ -172,6 +172,7 @@
                          tal:define="videoDetails python: view.getInformationsForVideo(videoInfos.heb_vid_url)">
                        <h3><span tal:replace="videoDetails/title" /></h3>
                        <img src=""
+                            alt="Video détails"
                             tal:attributes="src videoDetails/thumb">
                    </div>
                </tal:if>

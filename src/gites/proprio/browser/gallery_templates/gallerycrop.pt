@@ -1,9 +1,9 @@
 <script type="text/javascript"
         charset="utf-8"
-        tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/js/jquery.Jcrop.js"></script>
+        tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/js/jquery.Jcrop.min.js"></script>
 <link rel="stylesheet"
       type="text/css"
-      tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/css/jquery.Jcrop.css" />
+      tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/css/jquery.Jcrop.min.css" />
 
 <script type="text/javascript">
   jQuery(function($){
@@ -45,14 +45,14 @@
                <img src="" id="image-to-crop"
                     alt="Image à découper"
                     width="1000"
-                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg" />
+                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg?${view/random}" />
                <input type="hidden" name="scale" value="1000">
            </tal:if>
 
            <tal:if condition="python: int(width) <= 1000">
                <img src="" id="image-to-crop"
                     alt="Image à découper"
-                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg" />
+                    tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_heb_tmp/${hebPk}.jpg?${view/random}" />
                <input type="hidden" name="scale" value="">
            </tal:if>
 
