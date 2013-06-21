@@ -163,16 +163,16 @@ class ProprioMixin(object):
             proMajInfoEtat = "En attente confirmation"
             self.modifyStatutMajProprio(proPk, proMajInfoEtat)
 
-            sujet = "Modification des donnees personnelles par un proprio"
-            message = """Le proprio %s dont la référence est %s vient de modifier ses
-                         données. Il faut les vérifier et les valider
-                         via le lien suivant http://gdwadmin.affinitic.be/""" % (proNom, proPk)
+            sujet = u"Modification des donnees personnelles par un proprio"
+            message = u"""Le proprio %s dont la référence est %s vient de modifier ses
+                          données. Il faut les vérifier et les valider
+                          via le lien suivant http://gdwadmin.affinitic.be/""" % (proNom, proPk)
             self.sendMail(sujet, message)
             return {'status': 1}
         else:
-            sujet = "Un proprio a essayé modifié ses données personnelles"
-            message = """Le proprio %s dont la référence est %s a essayé de modifier ses
-                         données. Le processus est avorté suite à un problème de PK""" % (proNom, proPk)
+            sujet = u"Un proprio a essayé modifié ses données personnelles"
+            message = u"""Le proprio %s dont la référence est %s a essayé de modifier ses
+                          données. Le processus est avorté suite à un problème de PK""" % (proNom, proPk)
             self.sendMail(sujet, message)
             return {'status': -1}
 
