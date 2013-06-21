@@ -1,9 +1,9 @@
 <script type="text/javascript"
         charset="utf-8"
-        tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/js/jquery.Jcrop.js"></script>
+        tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/js/jquery.Jcrop.min.js"></script>
 <link rel="stylesheet"
       type="text/css"
-      tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/css/jquery.Jcrop.css" />
+      tal:attributes="href string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/image-crop/css/jquery.Jcrop.min.css" />
 
 <script type="text/javascript">
   jQuery(function($){
