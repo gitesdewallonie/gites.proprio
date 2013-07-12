@@ -54,7 +54,7 @@
            <input type="hidden" name="hebPk" value=""
                   tal:attributes="value heb/heb_pk">
 
-           <br />
+           <br /><br />
            <input type="submit" value="Sauvegarder l'image">
 
        </form>

@@ -49,7 +49,7 @@
            <input type="hidden" name="proPk" value=""
                   tal:attributes="value proPk">
 
-           <br />
+           <br /><br />
            <input type="submit" value="Sauvegarder l'image">
 
        </form>
