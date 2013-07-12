@@ -13,6 +13,8 @@ from urlparse import urlparse
 from z3c.sqlalchemy import getSAWrapper
 from Products.CMFCore.utils import getToolByName
 
+import logging
+
 
 class ZoneMembreMixin(object):
 
@@ -52,10 +54,12 @@ class ZoneMembreMixin(object):
     def purgeCacheForImages(self, imagesUrls):
         if not imagesUrls:
             return
+        logger = logging.getLogger('gites.proprio')
         baseUrl = urlparse(imagesUrls[0])
         connection = HTTPConnection(baseUrl.hostname, baseUrl.port or 80)
         for url in imagesUrls:
             url = urlparse(url)
+            logger.warning('Purging URL : %s' % url.path)
             connection.request('PURGE', url.path, '', {'Host': url.hostname})
             connection.getresponse().read()
         connection.close()

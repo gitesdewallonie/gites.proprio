@@ -24,6 +24,8 @@ from affinitic.pwmanager.interfaces import IPasswordManager
 from gites.proprio import interfaces
 from gites.proprio.browser.common import ZoneMembreMixin
 
+import logging
+
 
 @forever.memoize
 def getInformationsForVideo(videoUrl):
@@ -308,10 +310,16 @@ class GallerySave(grok.View, GalleryMixin):
         img.save(destination, "JPEG")
         imageUrlToPurge = '%s/%s39.jpg' % (photoStorage.absolute_url(),
                                            codeGDW)
+        logger = logging.getLogger('gites.proprio') 
+        logger.warning('Purging cache')
         self.purgeCacheForImages([imageUrlToPurge])
+        logger.warning('Unlinking original file')
         os.unlink(origin)
+        logger.warning('Compacting images')
         self.compactVignettes(hebPk)
+        logger.warning('Creating vignette')
         self.createVignette(hebPk)
         portalUrl = getToolByName(self.context, 'portal_url')()
+        logger.warning('Redirecting to gallery')
         self.request.response.redirect("%s/zone-membre/gallery-info?hebPk=%s" % (portalUrl, hebPk))
         return ''
