@@ -246,6 +246,7 @@ class GalleryUpload(grok.View, GalleryMixin):
         self.request.response.setHeader('Cache-Control', 'no-cache')
         return simplejson.dumps({'hebPk': hebPk,
                                  'filename': fileUpload.filename,
+                                 'height': height,
                                  'width': width,
                                  'message': message,
                                  'status': 1})

@@ -26,15 +26,41 @@
 </script>
 
 <div tal:define="proPk request/proPk;
-                 width request/width">
+                 height request/height;
+                 width request/width;
+                 mustResize python: int(height) != 170 or int(width) != 196;">
 
-    <div>
+    <div tal:condition="not: mustResize">
+       <p>
+            L'image a les dimensions requises.
+       </p>
+
+       <form method="post" action="save-image-proprio">
+
+           <img src="" id="image"
+                alt="Image"
+                tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio_tmp/${proPk}.jpg?${view/random}" />
+
+           <input id="x" type="hidden" name="x" value="0">
+           <input id="y" type="hidden" name="y" value="0">
+           <input id="w" type="hidden" name="w" value="196">
+           <input id="h" type="hidden" name="h" value="170">
+
+           <input type="hidden" name="proPk" value=""
+                  tal:attributes="value proPk">
+
+           <br />
+           <input type="submit" value="Sauvegarder l'image">
+
+       </form>
+    </div>
+
+    <div tal:condition="mustResize">
        <p>
             Vous devez couper l'image pour qu'elle ait les dimensions nécessaires.
        </p>
 
        <form onsubmit="return checkCoords();" method="post" action="save-image-proprio">
-
 
            <tal:if condition="python: int(width) > 1000">
                <img src="" id="image-to-crop"
@@ -60,11 +86,9 @@
                   tal:attributes="value proPk">
 
            <br />
-
            <input type="submit" value="Sauvegarder l'image">
 
        </form>
-
     </div>
 
 </div>

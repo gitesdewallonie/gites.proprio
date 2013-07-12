@@ -245,6 +245,7 @@ class ProprioPhotoUpload(grok.View, ZoneMembreMixin):
         self.request.response.setHeader('Cache-Control', 'no-cache')
         return simplejson.dumps({'proPk': proPk,
                                  'filename': fileUpload.filename,
+                                 'height': height,
                                  'width': width,
                                  'message': message,
                                  'status': 1})

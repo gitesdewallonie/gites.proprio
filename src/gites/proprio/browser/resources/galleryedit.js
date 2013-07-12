@@ -43,6 +43,7 @@ jQuery(document).ready(function($) {
                 $("#gallery-edition-fieldset").load("crop-image", {'hebPk': data.result.hebPk,
                                                                    'originalFile': data.result.filename,
                                                                    'status': data.result.status,
+                                                                   'height': data.result.height,
                                                                    'width': data.result.width,
                                                                    'message': data.result.message});
             }
@@ -63,6 +64,7 @@ jQuery(document).ready(function($) {
                 $("#proprio-photo-edition-fieldset").load("crop-image-proprio", {'proPk': data.result.proPk,
                                                                                  'originalFile': data.result.filename,
                                                                                  'status': data.result.status,
+                                                                                 'height': data.result.height,
                                                                                  'width': data.result.width,
                                                                                  'message': data.result.message});
             }
