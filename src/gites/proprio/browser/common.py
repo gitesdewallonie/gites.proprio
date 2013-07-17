@@ -57,7 +57,11 @@ class ZoneMembreMixin(object):
         logger = logging.getLogger('gites.proprio')
         baseUrl = urlparse(imagesUrls[0])
         connection = HTTPConnection(baseUrl.hostname, baseUrl.port or 80)
+        purgedImages = []
         for url in imagesUrls:
+            if url in purgedImages:
+                continue
+            purgedImages.append(url)
             url = urlparse(url)
             logger.warning('Purging URL : %s' % url.path)
             connection.request('PURGE', url.path, '', {'Host': url.hostname})
