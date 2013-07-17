@@ -146,8 +146,8 @@
                              tal:attributes="value metadata/pk" />
                       &nbsp;
                       <img src=""
-                           title="metadata/title"
-                           alt="metadata/title"
+                           title=""
+                           alt=""
                            width="24"
                            tal:attributes="src string:${metadata/id}.png;
                                            alt metadata/title;
@@ -164,9 +164,11 @@
                                              name metadata/pk" />
                       <input type="hidden" name="metadata_fk:list" value=""
                              tal:attributes="value metadata/pk" />
+                      &nbsp;
                       <img src=""
                            title=""
                            alt=""
+                           width="24"
                            tal:attributes="src string:${metadata/id}.png;
                                            alt metadata/title;
                                            title metadata/title;"
@@ -185,9 +187,11 @@
                                          name metadata/pk" />
                   <input type="hidden" name="metadata_fk:list" value=""
                          tal:attributes="value metadata/pk" />
+                  &nbsp;
                   <img src=""
                        title=""
                        alt=""
+                       width="24"
                        tal:attributes="src string:${metadata/id}.png;
                                        alt metadata/title;
                                        title metadata/title;"
