@@ -4,14 +4,14 @@
     <h2>Mise à jour des infos personnelles</h2>
     <div id="proprio-maj-info-menu">
         <a href=""
-           tal:attributes="href string:${portal_url}/zone-membre/proprio-info">
+           tal:attributes="href string:${portal_url}/zone-membre/proprio-info#form-top">
            Mes données personnelles
         </a>
     </div>
     <div id="proprio-configuration-calendrier">
         <a href=""
            tal:condition="not: viewlet/isBlocked"
-           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/configuration">
+           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/configuration#form-top">
            Configuration du calendrier
         </a>
         <span tal:condition="viewlet/isBlocked">
@@ -20,7 +20,7 @@
     </div>
     <div id="proprio-aide">
         <a href=""
-           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/aide">
+           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/aide#form-top">
            Aide
         </a>
     </div>
@@ -49,20 +49,20 @@
                     </td>
                     <td>
                         <a href=""
-                           tal:attributes="href string:${portal_url}/zone-membre/hebergement-info?hebPk=${gite/token}">
+                           tal:attributes="href string:${portal_url}/zone-membre/hebergement-info?hebPk=${gite/token}#form-top">
                            ici
                          </a>
                     </td>
                     <td>
                         <a href=""
                            tal:condition="showCalendar"
-                           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/month.html?pk=${gite/token};">
+                           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/month.html?pk=${gite/token}#form-top">
                            ici
                         </a>
                     </td>
                     <td>    
                         <a href=""
-                           tal:attributes="href string:${portal_url}/zone-membre/gallery-info?hebPk=${gite/token}">
+                           tal:attributes="href string:${portal_url}/zone-membre/gallery-info?hebPk=${gite/token}#form-top">
                            ici
                         </a>
                     </td>
@@ -75,7 +75,7 @@
         <a href=""
            class="tile"
            title="Affichage mensuel"
-           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/multical.html">
+           tal:attributes="href string:${context/@@plone_portal_state/portal_url}/zone-membre/calendrier/multical.html#form-top">
            Affichage mensuel du calendrier
         </a>
     </div>
@@ -83,3 +83,5 @@
     
     
 </div>
+
+<a name="form-top"></a>
