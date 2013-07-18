@@ -136,7 +136,7 @@
                  </td>
               </tr>
               <tr bgcolor="#FDFFE0">
-                 <td class="maj-etiquette">Activités</td>
+                 <td class="maj-etiquette">Activités sur place</td>
                  <td valign="middle">
                     <tal:block repeat="metadata python:view.get_editable_metadata('activites')">
                       <input type="checkbox" name="" checked="" value="1"
