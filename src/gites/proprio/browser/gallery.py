@@ -273,16 +273,15 @@ class GallerySave(grok.View, GalleryMixin):
     def __call__(self):
         fields = self.request.form
         hebPk = fields.get('hebPk')
-        coordX = int(fields.get('x'))
+        coordX = int(round(float(fields.get('x'))))
         if coordX < 0:
             coordX = 0
-        coordY = int(fields.get('y'))
+        coordY = int(round(float(fields.get('y'))))
         if coordY < 0:
             coordY = 0
-        width = int(float(fields.get('w')))
-        height = int(float(fields.get('h')))
+        width = int(round(float(fields.get('w'))))
+        height = int(round(float(fields.get('h'))))
         scale = fields.get('scale', '')
-
         hebergement = self.getHebergementByHebPk(hebPk)
         codeGDW = hebergement.heb_code_gdw
 
@@ -310,7 +309,7 @@ class GallerySave(grok.View, GalleryMixin):
         img.save(destination, "JPEG")
         imageUrlToPurge = '%s/%s39.jpg' % (photoStorage.absolute_url(),
                                            codeGDW)
-        logger = logging.getLogger('gites.proprio') 
+        logger = logging.getLogger('gites.proprio')
         logger.warning('Purging cache')
         self.purgeCacheForImages([imageUrlToPurge])
         logger.warning('Unlinking original file')

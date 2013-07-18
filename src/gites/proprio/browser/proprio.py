@@ -270,14 +270,14 @@ class ProprioPhotoSave(grok.View, ZoneMembreMixin):
     def __call__(self):
         fields = self.request.form
         proPk = fields.get('proPk')
-        coordX = int(fields.get('x'))
+        coordX = int(round(float(fields.get('x'))))
         if coordX < 0:
             coordX = 0
-        coordY = int(fields.get('y'))
+        coordY = int(round(float(fields.get('y'))))
         if coordY < 0:
             coordY = 0
-        width = int(float(fields.get('w')))
-        height = int(float(fields.get('h')))
+        width = int(round(float(fields.get('w'))))
+        height = int(round(float(fields.get('h'))))
         scale = fields.get('scale', '')
 
         utool = getToolByName(self.context, 'portal_url')
