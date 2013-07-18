@@ -8,7 +8,7 @@
     
 <div metal:fill-slot="main">
      
-    <h1>:: Modification des données proprio ::</h1>
+    <h2>Modification des données propriétaire</h2>
     <div tal:define="result view/addProprioMaj;
                      status result/status">
 

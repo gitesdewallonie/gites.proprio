@@ -50,7 +50,7 @@
               action="maj-info_proprio-insertion"
               method="post">
          
-            <label for="pro_pk">PK Proprio</label>
+            <label for="pro_pk">PK Propriétaire</label>
             <span tal:content="proprio/pro_pk"
                   id="pro_pk"
                   class="maj-donnee" />
@@ -203,7 +203,7 @@
 
                 <div id="description-photo-proprio">
                     <img src="" width="196" height="170"
-                         alt="Photo proprio"
+                         alt="Photo propriétaire"
                          tal:condition="photocontact"
                          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg?${view/random}" />
                 </div>

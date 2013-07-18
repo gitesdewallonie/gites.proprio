@@ -8,7 +8,7 @@
     
 <div metal:fill-slot="main">
      
-    <h1>:: Modification des données de l'hébergement ::</h1>
+    <h2>Modification des données de l'hébergement</h2>
     <div tal:define="result view/addHebergementMaj;
                      status result/status">
 
