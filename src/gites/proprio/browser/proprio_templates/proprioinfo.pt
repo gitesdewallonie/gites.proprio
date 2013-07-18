@@ -204,6 +204,10 @@
                 <div id="description-photo-proprio">
                     <img src="" width="196" height="170"
                          alt="Photo propriétaire"
+                         tal:condition="not: photocontact"
+                         tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/images/bg_photo_proprio.png" />
+                    <img src="" width="196" height="170"
+                         alt="Photo propriétaire"
                          tal:condition="photocontact"
                          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/photos_proprio/${proPk}.jpg?${view/random}" />
                 </div>
