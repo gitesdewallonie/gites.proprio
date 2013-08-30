@@ -164,13 +164,13 @@ class HebergementMixin(object):
             message = u"""
                 L'hébergement %s dont la référence est %s vient d'être modifié.
                 Il faut vérifer ces données et les valider via le lien""" % (hebNom, hebPk)
-            self.sendMail(sujet, message)
+            self.sendMail(sujet, message.encode('latin1'))
             return {'status': 1}
         else:
             sujet = u"Alerte :: Modification hebergement"
             message = u"""L'hébergement %s dont la référence est %s n'a pas été modifié.
                        Problème de PK""" % (hebNom, hebPk)
-            self.sendMail(sujet, message)
+            self.sendMail(sujet, message.encode('latin1'))
             return {'status': -1}
 
     def insert_missing_metadata(self, heb_pk):
