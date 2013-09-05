@@ -167,13 +167,13 @@ class ProprioMixin(object):
             message = u"""Le proprio %s dont la référence est %s vient de modifier ses
                           données. Il faut les vérifier et les valider
                           via le lien suivant http://gdwadmin.affinitic.be/""" % (proNom, proPk)
-            self.sendMail(sujet, message)
+            self.sendMail(sujet, message.encode('latin1'))
             return {'status': 1}
         else:
             sujet = u"Un proprio a essayé modifié ses données personnelles"
             message = u"""Le proprio %s dont la référence est %s a essayé de modifier ses
                           données. Le processus est avorté suite à un problème de PK""" % (proNom, proPk)
-            self.sendMail(sujet, message)
+            self.sendMail(sujet, message.encode('latin1'))
             return {'status': -1}
 
 
