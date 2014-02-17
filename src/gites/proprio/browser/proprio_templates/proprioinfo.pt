@@ -151,21 +151,12 @@
                    name="pro_maj_gsm1"
                    value=""
                    tal:attributes="value proprio/pro_gsm1" />
-                   <span tal:content="proprio/pro_gsm1" />
-        
-            <label for="">URL du site personnel</label>
-            <input type="text"
-                   name="pro_maj_url"
-                   value=""
-                   tal:attributes="value proprio/pro_url" />
-                   <span tal:content="proprio/pro_url" />
         
             <label for="">Numéro de TVA</label>
             <input type="text"
                    name="pro_maj_tva"
                    value=""
                    tal:attributes="value proprio/pro_tva" />
-                   <span tal:content="proprio/pro_tva" />
          
             <label for="">Langues parlées</label>
             <input type="text"

@@ -98,6 +98,7 @@ class HebergementMixin(object):
         newEntry = insertHebergementMaj(
             heb_maj_hebpk=fields.get('heb_maj_hebpk'),
             heb_maj_nom=fields.get('heb_maj_nom'),
+            heb_maj_url=fields.get('heb_maj_url'),
             heb_maj_adresse=fields.get('heb_maj_adresse'),
             heb_maj_localite=fields.get('heb_maj_localite'),
             heb_maj_tarif_we_bs=fields.get('heb_maj_tarif_we_bs'),

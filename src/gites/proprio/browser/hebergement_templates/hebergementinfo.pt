@@ -198,6 +198,16 @@
                        class="picto"/>
                 </td>
               </tr>
+              <tr bgcolor="#FDFFE0">
+                <td class="maj-etiquette">URL du site lié à l'hébergement</td>
+                <td>
+                  <input type="text"
+                         name="heb_maj_url"
+                         size="50"
+                         value=""
+                         tal:attributes="value heb/heb_url" />
+                </td>
+              </tr>
            </table>
            <!-- [FIN INFORMATION GENERALE] -->
 
