@@ -38,6 +38,7 @@
         <thead>
             <th>Hébergement</th>
             <th>Les données</th>
+            <th>Les tarifs</th>
             <th>Calendrier</th>
             <th>Galerie photos</th>
         </thead>
@@ -50,6 +51,12 @@
                     <td>
                         <a href=""
                            tal:attributes="href string:${portal_url}/zone-membre/hebergement-info?hebPk=${gite/token}#form-top">
+                           ici
+                         </a>
+                    </td>
+                    <td>
+                        <a href=""
+                           tal:attributes="href string:${portal_url}/zone-membre/tarif-edition?heb_pk=${gite/token}#form-top">
                            ici
                          </a>
                     </td>
