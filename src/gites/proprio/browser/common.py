@@ -48,6 +48,7 @@ class ZoneMembreMixin(object):
         proprioTable = wrapper.getMapper('proprio')
         query = session.query(proprioTable)
         query = query.filter(proprioTable.pro_log == proprioLogin)
+        query = query.filter(proprioTable.pro_etat == True)
         proprio = query.first()
         return proprio
 
