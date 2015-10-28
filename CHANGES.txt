@@ -4,7 +4,8 @@ Changelog
 0.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add possibility to choose date of birth for proprio refs #6289
+  [schminitz]
 
 
 0.1.1 (2014-12-02)
