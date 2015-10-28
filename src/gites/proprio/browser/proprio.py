@@ -110,6 +110,7 @@ class ProprioMixin(object):
         record.pro_maj_gsm1 = fields.get('pro_maj_gsm1')
         record.pro_maj_tva = fields.get('pro_maj_tva')
         record.pro_maj_langue = fields.get('pro_maj_langue')
+        record.pro_maj_date_naiss = fields.get('pro_maj_langue')
         session.flush()
 
     def insertProprioMaj(self):
@@ -135,7 +136,8 @@ class ProprioMixin(object):
                                     pro_maj_fax_priv=fields.get('pro_maj_fax_priv'),\
                                     pro_maj_gsm1=fields.get('pro_maj_gsm1'),\
                                     pro_maj_tva=fields.get('pro_maj_tva'),\
-                                    pro_maj_langue=fields.get('pro_maj_langue'),\
+                                    pro_maj_langue=fields.get('pro_maj_langue'), \
+                                    pro_maj_date_naiss=fields.get('pro_maj_date_naiss'),\
                                     )
         session.add(newEntry)
         session.flush()

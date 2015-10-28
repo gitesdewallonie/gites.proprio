@@ -16,6 +16,9 @@
   <script type="text/javascript"
           charset="utf-8"
           tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++gdwproprio/galleryedit.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++gdwproprio/proprio.js"></script>
 </metal:javascript_head_slot>
 
 <body>
@@ -163,6 +166,15 @@
                    name="pro_maj_langue"
                    value=""
                    tal:attributes="value proprio/pro_langue" />
+
+            <label for="pro_maj_date_naiss">Date de naissance</label>
+            <input id="pro_maj_date_naiss"
+                   class="datepicker-widget"
+                   type="text"
+                   value=""
+                   tal:attributes="value proprio/pro_date_naiss | nothing"
+                   size="12"
+                   name="pro_maj_date_naiss" />
 
             <div class="submit-form">
                 <input type="hidden"
