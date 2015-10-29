@@ -7,6 +7,9 @@ Changelog
 - Avoid error with 'None' in date naiss refs #6289
   [schminitz]
 
+- Increase year range for date naiss refs #6289
+  [schminitz]
+
 
 0.1.2 (2015-10-28)
 ------------------
