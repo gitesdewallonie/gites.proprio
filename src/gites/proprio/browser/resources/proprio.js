@@ -8,6 +8,7 @@ jQuery(document).ready(function($) {
                                        changeMonth: true,
                                        changeYear: true,
                                        defaultDate: -10950,
-                                       stepMonths: 12
+                                       stepMonths: 12,
+                                       yearRange: "-100:-18"
                                      });
 });
