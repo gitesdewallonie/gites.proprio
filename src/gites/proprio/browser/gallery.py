@@ -7,24 +7,23 @@ Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
 
-import micawber
+from PIL import Image, ImageFile
+from Products.CMFCore.utils import getToolByName
+from datetime import datetime
+from five import grok
 from micawber.exceptions import InvalidResponseException
 from micawber.exceptions import ProviderException
 from micawber.exceptions import ProviderNotFoundException
+from plone.memoize import forever
+from z3c.sqlalchemy import getSAWrapper
+import logging
+import micawber
 import os
 import simplejson
-from datetime import datetime
-from PIL import Image, ImageFile
 import zope.interface
-from five import grok
-from z3c.sqlalchemy import getSAWrapper
-from Products.CMFCore.utils import getToolByName
-from plone.memoize import forever
 
 from gites.proprio import interfaces
 from gites.proprio.browser.common import ZoneMembreMixin
-
-import logging
 
 
 @forever.memoize
