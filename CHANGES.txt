@@ -4,6 +4,9 @@ Changelog
 0.1.4 (unreleased)
 ------------------
 
+- Migrate from Embedly to Micawber #6597
+  [laulaz]
+
 - Fix 'decoding Unicode is not supported' error on update proprio refs #6291
   [schminitz]
 

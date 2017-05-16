@@ -7,19 +7,19 @@ Licensed under the GPL license, see LICENCE.txt for more details.
 Copyright by Affinitic sprl
 """
 
+import micawber
+from micawber.exceptions import InvalidResponseException
+from micawber.exceptions import ProviderException
+from micawber.exceptions import ProviderNotFoundException
 import os
 import simplejson
 from datetime import datetime
-from embedly import Embedly
 from PIL import Image, ImageFile
 import zope.interface
-from zope.component import getUtility
 from five import grok
 from z3c.sqlalchemy import getSAWrapper
 from Products.CMFCore.utils import getToolByName
 from plone.memoize import forever
-
-from affinitic.pwmanager.interfaces import IPasswordManager
 
 from gites.proprio import interfaces
 from gites.proprio.browser.common import ZoneMembreMixin
@@ -29,14 +29,15 @@ import logging
 
 @forever.memoize
 def getInformationsForVideo(videoUrl):
-    pwManager = getUtility(IPasswordManager, 'embedly')
-    key = pwManager.username
-    client = Embedly(key)
-    embed = client.oembed(videoUrl)
-    if embed.error:
+    providers = micawber.bootstrap_basic()
+    try:
+        embed = providers.request(videoUrl)
+    except (InvalidResponseException,
+            ProviderException,
+            ProviderNotFoundException):
         return None
-    return {'title': embed.title,
-            'thumb': embed.thumbnail_url}
+    return {'title': embed['title'],
+            'thumb': embed['thumbnail_url']}
 
 
 class GalleryMixin(ZoneMembreMixin):
@@ -157,9 +158,6 @@ class GalleryInfo(grok.View, GalleryMixin):
         return getInformationsForVideo(videoUrl)
 
     def updateGallery(self):
-        pwManager = getUtility(IPasswordManager, 'embedly')
-        key = pwManager.username
-
         proprio = self.getProprioByLogin()
         proPk = proprio.pro_pk
         request = self.request
@@ -187,8 +185,8 @@ class GalleryInfo(grok.View, GalleryMixin):
 
         videoUrl = videoUrl.replace("https", "http")
         videoUrl = videoUrl.strip()
-        client = Embedly(key)
-        if not client.is_supported(videoUrl):
+        videosInfos = getInformationsForVideo(videoUrl)
+        if not videosInfos:
             return {'status': 0}
 
         query = session.query(hebVideoTable)
