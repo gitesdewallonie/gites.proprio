@@ -4,7 +4,8 @@ Changelog
 0.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Avoid error when video cannot be found : show message instead #6658
+  [laulaz]
 
 
 0.1.4 (2017-05-16)

@@ -34,7 +34,8 @@ def getInformationsForVideo(videoUrl):
     except (InvalidResponseException,
             ProviderException,
             ProviderNotFoundException):
-        return None
+        return {'title': 'Vidéo introuvable',
+                'thumb': ''}
     return {'title': embed['title'],
             'thumb': embed['thumbnail_url']}
 
