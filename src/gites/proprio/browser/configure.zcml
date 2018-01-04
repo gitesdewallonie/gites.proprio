@@ -8,10 +8,27 @@
   <grok:grok package=".proprio" />
   <grok:grok package=".gallery" />
 
-  <browser:resourceDirectory
-      name="gdwproprio"
-      directory="resources/"
-      permission="zope2.View"
-      />
+
+    <browser:resourceDirectory
+        name="gdwproprio"
+        directory="resources/"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="*"
+        name="gerer-le-certificat-peb"
+        template="cetificat_peb_templates/peb_ajouter.pt"
+        permission="zope.Public"
+        class=".manageCertificatPeb.ManageCertificatPeb"
+        />
+
+    <browser:page
+        name="updateHebergementCertificatPeb"
+        for="*"
+        class=".manageCertificatPeb.ManageCertificatPeb"
+        permission="zope.Public"
+        attribute="updateHebergementCertificatPeb"
+        />
 
 </configure>

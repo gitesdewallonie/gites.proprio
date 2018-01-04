@@ -1,0 +1,149 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<metal:javascript_head_slot fill-slot="javascript_head_slot">
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.ui.widget.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.iframe-transport.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++theme++gites.theme/uploader/jquery.fileupload.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++gdwproprio/galleryedit.js"></script>
+  <script type="text/javascript"
+          charset="utf-8"
+          tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++gdwproprio/proprio.js"></script>
+</metal:javascript_head_slot>
+
+<metal:block fill-slot="top_slot"
+           tal:define="dummy python:request.set('disable_border',1)" />
+
+<metal:main  metal:fill-slot="main"
+              tal:define="hebPk request/heb_pk" >
+     <!--tal:define="proprio view/getProprioByLogin">-->
+
+    <div id="error-message"
+         class="error-center"
+         style="display:none">
+        Error message filled by javascript
+    </div>
+
+    <div id="zone-proprio-formulaire">
+        <h2>Modifier vos données</h2>
+        <p>
+          Ce formulaire vous permet de modifier votre certificat PEB.
+        </p>
+        <p>
+          Si vous souhaitez obtenir des informations complémentaires ou
+          si vous éprouvez des difficultés à compléter ce formulaire,
+          merci de prendre contact avec nos bureaux au 081 311 800.
+        </p>
+        <p>
+          Dès que vous aurez enregistré ce formulaire, celui-ci sera
+          transmis aux Gîtes de Wallonie qui vérifieront et valideront
+          vos données. Dès que celles-ci seront validées, elles apparaitront sur le site.
+        </p>
+
+        <p>
+            <img src="logo_peb_exemple.jpg"
+                 id="logo_peb_exemple" />
+        </p>
+
+        <form action="updateHebergementCertificatPeb"
+              method="post">
+
+              <label for="">Code unique</label>
+              <input type="text"
+                     name="hebPebCode"
+                     value=""
+                     size="50" />
+            <label for="">Consommation théorique totale d'énergie primaire (kWh/an)</label>
+            <input type="text"
+                   name="hebPebEnergieTotale"
+                   size="50"
+                   value="" />
+
+            <label for="pro_maj_nom1">Consommation spécifique d'énergie primaire (kWh/m².an)</label>
+            <input type="text"
+                   name="hebPebEnergiePrimaire"
+                   id=""
+                   size="50"
+                   value="" />
+
+            <label for="">Logo représentant votre certificat</label>
+            <div class="logo_peb"
+                 id="logo_peb_a">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_a.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_ap">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_ap.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_app">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_app.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_b">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_b.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_c">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_c.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_d">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_d.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_e">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_e.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_f">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_f.png" />
+            </div>
+            <div class="logo_peb"
+                 id="logo_peb_g">
+                <input type="radio"
+                       name="hebPebIcone"
+                       value="logo_peb_g.png" />
+            </div>
+
+
+            <div class="submit-form">
+                <input type="hidden"
+                       name="hebPk"
+                       value=""
+                       tal:attributes="value hebPk" />
+                <input type="submit"
+                       value="Enregistrer mon certificat" />
+            </div>
+        </form>
+        <br />
+    </div><!--zone-ceetificat-formulaire-->
+</metal:main>
+</html>

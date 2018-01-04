@@ -19,6 +19,9 @@ class IHebergementInfo(zope.interface.Interface):
         la table provisoire
         """
 
+class ICerticatPebView(zope.interface.Interface):
+    """ Mise du certificat peb """
+
 
 class IProprioInfo(zope.interface.Interface):
     """ Mise à jour Info Proprio """

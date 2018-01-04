@@ -39,6 +39,7 @@
             <th>Hébergement</th>
             <th>Les données</th>
             <th>Les tarifs</th>
+            <th>Certificat PEB</th>
             <th>Calendrier</th>
             <th>Galerie photos</th>
         </thead>
@@ -56,7 +57,13 @@
                     </td>
                     <td>
                         <a href=""
-                           tal:attributes="href string:${portal_url}/zone-membre/tarif-edition?heb_pk=${gite/token}#form-top">
+                           tal:attributes="href string:${portal_url}/zone-membre/tarif-edition?heb_pk=${gite/token}#">
+                           ici
+                         </a>
+                    </td>
+                    <td>
+                        <a href=""
+                           tal:attributes="href string:${portal_url}/zone-membre/gerer-le-certificat-peb?heb_pk=${gite/token}">
                            ici
                          </a>
                     </td>
@@ -67,7 +74,7 @@
                            ici
                         </a>
                     </td>
-                    <td>    
+                    <td>
                         <a href=""
                            tal:attributes="href string:${portal_url}/zone-membre/gallery-info?hebPk=${gite/token}#form-top">
                            ici
@@ -87,8 +94,8 @@
         </a>
     </div>
     <div class="break-float"></div>
-    
-    
+
+
 </div>
 
 <a name="form-top"></a>
