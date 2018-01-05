@@ -18,7 +18,7 @@
     <browser:page
         for="*"
         name="gerer-le-certificat-peb"
-        template="cetificat_peb_templates/peb_ajouter.pt"
+        template="certificat_peb_templates/peb_ajouter.pt"
         permission="zope.Public"
         class=".manageCertificatPeb.ManageCertificatPeb"
         />
