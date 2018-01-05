@@ -26,7 +26,9 @@
            tal:define="dummy python:request.set('disable_border',1)" />
 
 <metal:main  metal:fill-slot="main"
-              tal:define="hebPk request/heb_pk" >
+              tal:define="hebPk request/heb_pk;
+                          certificatView context/@@manageCertificatPeb;
+                          hebergement python:certificatView.getCertificatPebByHebPk(hebPk)" >
      <!--tal:define="proprio view/getProprioByLogin">-->
 
     <div id="error-message"
@@ -55,6 +57,22 @@
             <img src="logo_peb_exemple.jpg"
                  id="logo_peb_exemple" />
         </p>
+
+        <div id="zone-proprio-certificat-peb-info">
+            <h3>Vos données PEB actuelles</h3>
+                <img src=""
+                     height="25"
+                     tal:attributes="src string:${hebergement/heb_peb_icone}" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+
+                PEB n° : <span tal:content="hebergement/heb_peb_code" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                Energie totale :
+                <span tal:content="hebergement/heb_peb_energie_totale" /> kWh/an<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                Energie spécifique :
+                <span tal:content="hebergement/heb_peb_energie_primaire" /> kWh/m².an<br />
+        </div>
 
         <form action="updateHebergementCertificatPeb"
               method="post">

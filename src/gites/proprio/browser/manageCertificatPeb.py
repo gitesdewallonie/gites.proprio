@@ -20,9 +20,16 @@ from gites.proprio import interfaces
 class ManageCertificatPeb(BrowserView):
 
     def getCertificatPebByHebPk(self, hebPk):
-        """ Retourne les type de table d'hote d'un hebergement """
-        session = getSAWrapper('gites_wallons').session
-        return query.all()
+        """
+        Retourne les type de table d'hote d'un hebergement
+        """
+        wrapper = getSAWrapper('gites_wallons')
+        session = wrapper.session
+        tableHebergement = wrapper.getMapper('hebergement')
+        query = session.query(tableHebergement)
+        query = query.filter(tableHebergement.heb_pk == hebPk)
+        hebergement = query.one()
+        return hebergement
 
 
     def updateHebergementCertificatPeb(self):
