@@ -60,18 +60,23 @@
 
         <div id="zone-proprio-certificat-peb-info">
             <h3>Vos données PEB actuelles</h3>
-                <img src=""
-                     height="25"
-                     tal:attributes="src string:${hebergement/heb_peb_icone}" /><br />
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div tal:condition="python: heb.heb_peb_code != None">
+                    <img src=""
+                         height="25"
+                         tal:attributes="src string:${hebergement/heb_peb_icone}" /><br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;
 
-                PEB n° : <span tal:content="hebergement/heb_peb_code" /><br />
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                Energie totale :
-                <span tal:content="hebergement/heb_peb_energie_totale" /> kWh/an<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                Energie spécifique :
-                <span tal:content="hebergement/heb_peb_energie_primaire" /> kWh/m².an<br />
+                    PEB n° : <span tal:content="hebergement/heb_peb_code" /><br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    Energie totale :
+                    <span tal:content="hebergement/heb_peb_energie_totale" /> kWh/an<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    Energie spécifique :
+                    <span tal:content="hebergement/heb_peb_energie_primaire" /> kWh/m².an<br />
+                </div>
+                <div tal:condition="python: heb.heb_peb_code == None">
+                    Aucun certificat encodé actuellement
+                </div>
         </div>
 
         <form action="updateHebergementCertificatPeb"
